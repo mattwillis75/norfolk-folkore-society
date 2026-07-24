@@ -463,11 +463,12 @@
         document.addEventListener("DOMContentLoaded", function() {
             
             // Using Substack's native JSON archive API instead of RSS.
-            // limit=200 grabs up to 200 posts at once.
-            const apiUrl = 'https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=200';
-            
-            const feedContainer = document.getElementById('substack-feed');
-            const paginationContainer = document.getElementById('pagination-controls');
+// We route it through the AllOrigins CORS proxy so the browser doesn't block it.
+const substackUrl = 'https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=200';
+const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(substackUrl)}`;
+
+const feedContainer = document.getElementById('substack-feed');
+const paginationContainer = document.getElementById('pagination-controls');
             
             let allStories = [];
             const storiesPerPage = 9;
