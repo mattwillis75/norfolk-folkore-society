@@ -59,7 +59,7 @@
         }
 
         .logo-container img {
-            max-width: 750px; /* Increased to stretch wider than nav links */
+            max-width: 750px; 
             width: 95%;
             height: auto;
             margin-bottom: 1rem;
@@ -253,7 +253,7 @@
 
         .section-title {
             font-size: 2rem;
-            margin-bottom: 3rem; /* Matched to divider 3rem to create equal spacing */
+            margin-bottom: 3rem; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -268,7 +268,9 @@
         .section-title img {
             height: 2rem;
             width: auto;
-            transform: translateY(6px); /* Nudged down to align perfectly with text */
+            /* Changed from transform to position relative so it doesn't conflict with slide-in animation */
+            position: relative;
+            top: 6px; 
         }
 
         /* Society Portraits Layout */
@@ -304,7 +306,9 @@
             height: 2px;
             background-color: var(--accent-line);
             margin: 3rem auto;
-            width: 90%;
+            /* width adjusted to exactly match the 3 columns + gap (1000px max width - 4rem padding) */
+            width: calc(100% - 4rem); 
+            max-width: 936px;
         }
 
         /* Featured Stories Grid */
