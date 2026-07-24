@@ -55,7 +55,7 @@
             z-index: 1000;
             padding: 1.5rem 0;
             text-align: center;
-            border-bottom: 4px solid var(--accent-line); /* Added line at bottom of header */
+            border-bottom: 2px solid var(--accent-line); /* Adjusted to 2px */
         }
 
         .logo-container img {
@@ -260,6 +260,12 @@
             gap: 15px;
         }
 
+        .section-title h2 {
+            line-height: 1; /* Eliminates extra vertical spacing */
+            margin: 0;
+            padding-top: 3px; /* Minor optical adjustment to perfectly level with SVGs */
+        }
+
         .section-title img {
             height: 2rem;
             width: auto;
@@ -268,11 +274,11 @@
         /* Society Portraits Layout */
         .society-content {
             display: flex;
-            align-items: flex-start; /* Aligns items to the top */
+            align-items: flex-start;
             justify-content: space-between;
             gap: 30px;
             text-align: center;
-            margin-bottom: 0; /* Reset for better control of divider spacing */
+            margin-bottom: 0;
         }
 
         .portrait {
@@ -295,9 +301,9 @@
 
         .divider {
             border: 0;
-            height: 4px; /* Increased to 4px */
-            background-color: var(--accent-line); /* Changed color */
-            margin: 3rem auto; /* Creates equal 3rem spacing above and below */
+            height: 2px; /* Adjusted to 2px */
+            background-color: var(--accent-line);
+            margin: 3rem auto;
             width: 90%;
         }
 
@@ -323,7 +329,7 @@
 
         .story-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Added white glow */
         }
 
         .story-card img.hero-img {
@@ -402,23 +408,26 @@
             transform: scale(1.1);
         }
 
+        /* Pulled elements closer together */
         .footer-center {
             text-align: center;
             flex: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 0.5rem; /* Tighter gap */
         }
 
         .footer-center h2 {
             font-size: 2.2rem;
-            margin-bottom: 0.2rem;
+            margin: 0; /* Removed margin */
             letter-spacing: 1px;
+            line-height: 1;
         }
 
         .footer-center p {
             font-size: 1.2rem;
-            margin-bottom: 1.5rem;
+            margin: 0 0 0.5rem 0; /* Tightened spacing to button */
         }
 
         .btn-signup {
@@ -451,16 +460,43 @@
             border-radius: 50%;
         }
 
-        /* Animation Classes */
+        /* -----------------------
+           ANIMATION CLASSES 
+           ----------------------- */
+           
+        /* Fade up on scroll */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
-        .animate-on-scroll.is-visible {
+        /* Scale up from center (Portraits) */
+        .portrait-animate {
+            opacity: 0;
+            transform: scale(0);
+            transform-origin: center center;
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Slide in from left */
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        /* Slide in from right */
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        /* Universal visible state */
+        .is-visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1) translateX(0);
         }
 
         /* Responsive */
@@ -488,8 +524,8 @@
     <header>
         <div class="logo-container">
             <a href="index.html">
-                <!-- Logo updated to .png extension -->
-                <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society">
+                <!-- Lazy loading applied to logo -->
+                <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society" loading="lazy">
             </a>
         </div>
         <nav>
@@ -507,11 +543,11 @@
     <!-- Floating Join Us Roundel -->
     <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
         JOIN<br>US
-        <img src="images/tailpiece.svg" alt="decoration">
+        <img src="images/tailpiece.svg" alt="decoration" loading="lazy">
     </a>
 
     <main>
-        <!-- Carousel Section Restored with 5 Images and Arrows -->
+        <!-- Carousel Section -->
         <section class="carousel-container animate-on-scroll">
             <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
             <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
@@ -595,40 +631,43 @@
         <!-- About Us Section -->
         <section class="section-container animate-on-scroll">
             <div class="section-title">
-                <img src="images/header-decoration-left.svg" alt="Left Decoration">
-                <!-- Heading changed to ABOUT US -->
+                <!-- Added slide animation classes & lazy loading -->
+                <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
                 <h2>ABOUT US</h2>
-                <img src="images/header-decoration-right.svg" alt="Right Decoration">
+                <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
             <div class="society-content">
-                <img src="images/siofra.png" alt="Siofra" class="portrait">
+                <!-- Added portrait animation class & lazy loading -->
+                <img src="images/siofra.png" alt="Siofra" class="portrait portrait-animate" loading="lazy">
                 
                 <div class="description-text">
                     <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
                     <p style="margin-top: 1rem;">Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
-                    <img src="images/tailpiece.svg" alt="Tailpiece Graphic" class="tailpiece">
+                    <img src="images/tailpiece.svg" alt="Tailpiece Graphic" class="tailpiece" loading="lazy">
                 </div>
 
-                <img src="images/stacia.png" alt="Stacia" class="portrait">
+                <!-- Added portrait animation class & lazy loading -->
+                <img src="images/stacia.png" alt="Stacia" class="portrait portrait-animate" loading="lazy">
             </div>
         </section>
 
-        <!-- Centered, uniformly spaced divider -->
         <hr class="divider animate-on-scroll">
 
-        <!-- Featured Stories (Top padding set to 0 to keep spacing perfectly equal from the divider) -->
+        <!-- Featured Stories -->
         <section class="section-container animate-on-scroll" style="padding-top: 0;">
             <div class="section-title">
-                <img src="images/header-decoration-left.svg" alt="Left Decoration">
+                <!-- Added slide animation classes & lazy loading -->
+                <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
                 <h2>FEATURED STORIES</h2>
-                <img src="images/header-decoration-right.svg" alt="Right Decoration">
+                <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
             <div class="stories-grid">
                 <!-- Story 1 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <img src="images/Featured%20Stories%201.png" alt="Whirlwinds" class="hero-img">
+                    <!-- Added lazy loading -->
+                    <img src="images/Featured%20Stories%201.png" alt="Whirlwinds" class="hero-img" loading="lazy">
                     <div class="story-content">
                         <h3>The Norfolk whirlwinds sent by the Devil</h3>
                         <p class="author-date">by <strong>Stacia Briggs</strong><br>Dec 23, 2025</p>
@@ -638,7 +677,8 @@
 
                 <!-- Story 2 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <img src="images/Featured%20Stories%202.png" alt="Vanishing Mansions" class="hero-img">
+                    <!-- Added lazy loading -->
+                    <img src="images/Featured%20Stories%202.png" alt="Vanishing Mansions" class="hero-img" loading="lazy">
                     <div class="story-content">
                         <h3>The Norfolk mansions that vanish into thin air</h3>
                         <p class="author-date">by <strong>Stacia Briggs</strong><br>Oct 7, 2025</p>
@@ -648,7 +688,8 @@
 
                 <!-- Story 3 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <img src="images/Featured%20Stories%203.png" alt="Goat's Head" class="hero-img">
+                    <!-- Added lazy loading -->
+                    <img src="images/Featured%20Stories%203.png" alt="Goat's Head" class="hero-img" loading="lazy">
                     <div class="story-content">
                         <h3>The Cursed Goat's Head of Strumpshaw</h3>
                         <p class="author-date">by <strong>Stacia Briggs</strong><br>Jul 4, 2025</p>
@@ -719,7 +760,6 @@
             startInterval();
         }
 
-        // Initialize Carousel
         startInterval();
 
         // Scroll Animation Logic
@@ -738,7 +778,8 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.animate-on-scroll').forEach(element => {
+        // Expanded querySelector to track newly added animation classes
+        document.querySelectorAll('.animate-on-scroll, .portrait-animate, .slide-in-left, .slide-in-right').forEach(element => {
             observer.observe(element);
         });
     </script>
