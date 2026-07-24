@@ -157,7 +157,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin-bottom: 4rem;
+            margin-bottom: 2rem;
         }
 
         .story-card {
@@ -217,6 +217,41 @@
             font-size: 1.2rem;
             color: var(--text-light);
             padding: 2rem;
+        }
+
+        /* Pagination Controls */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--accent-line);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .pagination button.active, .pagination button:hover:not(:disabled) {
+            background-color: var(--secondary-green);
+            color: white;
+            border-color: var(--text-light);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         /* Footer */
@@ -367,7 +402,6 @@
         <nav>
             <ul class="nav-links">
                 <li><a href="index.html">HOME</a></li>
-                <!-- Stories is now the active tab -->
                 <li><a href="stories.html" class="active">STORIES</a></li>
                 <li><a href="map.html">MAP</a></li>
                 <li><a href="shop.html">SHOP</a></li>
@@ -392,10 +426,13 @@
                 <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
-            <!-- This grid will be populated by JavaScript -->
             <div class="stories-grid" id="substack-feed">
                 <p class="loading-message">Summoning stories from the archive...</p>
             </div>
+
+            <!-- Pagination container added here -->
+            <div class="pagination" id="pagination-controls"></div>
+
         </section>
     </main>
 
@@ -424,58 +461,22 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            // 1. Fetch Substack Feed
+            // Configuration for Substack feed and pagination
             const substackUrl = 'https://norfolkfolkloresociety.substack.com/feed';
-            // We use rss2json as a free proxy to turn the XML feed into easily readable JSON
             const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(substackUrl)}`;
             const feedContainer = document.getElementById('substack-feed');
+            const paginationContainer = document.getElementById('pagination-controls');
+            
+            let allStories = [];
+            const storiesPerPage = 9;
+            let currentPage = 1;
 
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'ok') {
-                        feedContainer.innerHTML = ''; // Clear loading message
-
-                        data.items.forEach(item => {
-                            // Format the publish date to match the "Dec 23, 2025" style
-                            const dateObj = new Date(item.pubDate);
-                            const formattedDate = dateObj.toLocaleDateString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric', 
-                                year: 'numeric' 
-                            });
-
-                            // Substack usually provides a thumbnail, if not, use a fallback image
-                            const imageUrl = item.thumbnail || 'images/Featured%20Stories%201.png';
-                            
-                            // Substack sends full HTML in the description. We need to strip the tags to get a clean excerpt.
-                            const tempDiv = document.createElement("div");
-                            tempDiv.innerHTML = item.description;
-                            let textContent = tempDiv.textContent || tempDiv.innerText || "";
-                            
-                            // Truncate to ~120 characters for the card
-                            const excerpt = textContent.length > 120 
-                                ? textContent.substring(0, 120).trim() + "..." 
-                                : textContent;
-
-                            // If no author is found in the feed, we can default to Ada Nemesis or Stacia Briggs
-                            const author = item.author || "Norfolk Folklore Society";
-
-                            // Build the HTML for the card
-                            const cardHTML = `
-                                <a href="${item.link}" class="story-card" target="_blank">
-                                    <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
-                                    <div class="story-content">
-                                        <h3>${item.title}</h3>
-                                        <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
-                                        <p class="excerpt">${excerpt}</p>
-                                    </div>
-                                </a>
-                            `;
-                            
-                            // Add it to the grid
-                            feedContainer.insertAdjacentHTML('beforeend', cardHTML);
-                        });
+                        allStories = data.items;
+                        renderPage(currentPage);
                     } else {
                         feedContainer.innerHTML = '<p class="loading-message">Unable to load stories at this time.</p>';
                     }
@@ -485,7 +486,109 @@
                     feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
                 });
 
-            // 2. Scroll Animation Logic
+            // Function to render 9 stories for the current page
+            function renderPage(page) {
+                feedContainer.innerHTML = ''; // Clear existing
+                
+                const startIndex = (page - 1) * storiesPerPage;
+                const endIndex = startIndex + storiesPerPage;
+                const storiesToDisplay = allStories.slice(startIndex, endIndex);
+
+                storiesToDisplay.forEach(item => {
+                    // Date formatting
+                    const dateObj = new Date(item.pubDate);
+                    const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                    });
+
+                    // IMAGE EXTRACTION: Parse the full HTML content to find the first embedded image
+                    let imageUrl = 'images/Featured%20Stories%201.png'; // Fallback
+                    const tempDiv = document.createElement("div");
+                    tempDiv.innerHTML = item.content || item.description || "";
+                    const firstImage = tempDiv.querySelector("img");
+                    
+                    if (firstImage && firstImage.src) {
+                        imageUrl = firstImage.src;
+                    } else if (item.thumbnail && item.thumbnail !== "") {
+                        imageUrl = item.thumbnail; // Fallback to RSS thumbnail if available
+                    }
+                    
+                    // Excerpt extraction (strip HTML tags)
+                    let textContent = tempDiv.textContent || tempDiv.innerText || "";
+                    const excerpt = textContent.length > 120 
+                        ? textContent.substring(0, 120).trim() + "..." 
+                        : textContent;
+
+                    const author = item.author || "Ada Nemesis";
+
+                    // Build Card HTML
+                    const cardHTML = `
+                        <a href="${item.link}" class="story-card" target="_blank">
+                            <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
+                            <div class="story-content">
+                                <h3>${item.title}</h3>
+                                <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
+                                <p class="excerpt">${excerpt}</p>
+                            </div>
+                        </a>
+                    `;
+                    
+                    feedContainer.insertAdjacentHTML('beforeend', cardHTML);
+                });
+
+                renderPaginationControls(page);
+                
+                // Scroll back to the top of the stories section on page change
+                if (page > 1) {
+                    document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            // Function to render the Next/Prev and page numbers
+            function renderPaginationControls(activePage) {
+                const totalPages = Math.ceil(allStories.length / storiesPerPage);
+                paginationContainer.innerHTML = ''; // Clear existing controls
+
+                if (totalPages <= 1) return; // Don't show pagination if there's only 1 page
+
+                // Previous Button
+                const prevBtn = document.createElement('button');
+                prevBtn.innerHTML = '&#10094; Prev';
+                prevBtn.disabled = activePage === 1;
+                prevBtn.addEventListener('click', () => {
+                    currentPage--;
+                    renderPage(currentPage);
+                });
+                paginationContainer.appendChild(prevBtn);
+
+                // Page Number Buttons
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.innerText = i;
+                    if (i === activePage) {
+                        pageBtn.classList.add('active');
+                    }
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        renderPage(currentPage);
+                    });
+                    paginationContainer.appendChild(pageBtn);
+                }
+
+                // Next Button
+                const nextBtn = document.createElement('button');
+                nextBtn.innerHTML = 'Next &#10095;';
+                nextBtn.disabled = activePage === totalPages;
+                nextBtn.addEventListener('click', () => {
+                    currentPage++;
+                    renderPage(currentPage);
+                });
+                paginationContainer.appendChild(nextBtn);
+            }
+
+            // Scroll Animation Logic
             const observerOptions = {
                 root: null,
                 rootMargin: '0px',
