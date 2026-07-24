@@ -155,7 +155,8 @@
         /* Stories Grid */
         .stories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            /* Changed auto-fit to auto-fill to prevent stretching on the last row */
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
@@ -430,7 +431,7 @@
                 <p class="loading-message">Summoning stories from the archive...</p>
             </div>
 
-            <!-- Pagination container added here -->
+            <!-- Pagination container -->
             <div class="pagination" id="pagination-controls"></div>
 
         </section>
@@ -461,9 +462,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            // Configuration for Substack feed and pagination
-            const substackUrl = 'https://norfolkfolkloresociety.substack.com/feed';
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(substackUrl)}`;
+            // Using Substack's native JSON archive API instead of RSS.
+            // limit=200 grabs up to 200 posts at once.
+            const apiUrl = 'https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=200';
+            
             const feedContainer = document.getElementById('substack-feed');
             const paginationContainer = document.getElementById('pagination-controls');
             
@@ -474,58 +476,54 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'ok') {
-                        allStories = data.items;
+                    // Substack returns the array of posts directly
+                    if (Array.isArray(data) && data.length > 0) {
+                        allStories = data;
                         renderPage(currentPage);
                     } else {
                         feedContainer.innerHTML = '<p class="loading-message">Unable to load stories at this time.</p>';
                     }
                 })
                 .catch(error => {
-                    console.error('Error fetching Substack feed:', error);
+                    console.error('Error fetching Substack API:', error);
                     feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
                 });
 
             // Function to render 9 stories for the current page
             function renderPage(page) {
-                feedContainer.innerHTML = ''; // Clear existing
+                feedContainer.innerHTML = ''; 
                 
                 const startIndex = (page - 1) * storiesPerPage;
                 const endIndex = startIndex + storiesPerPage;
                 const storiesToDisplay = allStories.slice(startIndex, endIndex);
 
                 storiesToDisplay.forEach(item => {
-                    // Date formatting
-                    const dateObj = new Date(item.pubDate);
+                    // Date formatting from Substack's native post_date
+                    const dateObj = new Date(item.post_date);
                     const formattedDate = dateObj.toLocaleDateString('en-US', { 
                         month: 'short', 
                         day: 'numeric', 
                         year: 'numeric' 
                     });
 
-                    // IMAGE EXTRACTION: Parse the full HTML content to find the first embedded image
-                    let imageUrl = 'images/Featured%20Stories%201.png'; // Fallback
-                    const tempDiv = document.createElement("div");
-                    tempDiv.innerHTML = item.content || item.description || "";
-                    const firstImage = tempDiv.querySelector("img");
+                    // Substack native API provides the cover_image directly
+                    const imageUrl = item.cover_image || 'images/Featured%20Stories%201.png';
                     
-                    if (firstImage && firstImage.src) {
-                        imageUrl = firstImage.src;
-                    } else if (item.thumbnail && item.thumbnail !== "") {
-                        imageUrl = item.thumbnail; // Fallback to RSS thumbnail if available
-                    }
-                    
-                    // Excerpt extraction (strip HTML tags)
-                    let textContent = tempDiv.textContent || tempDiv.innerText || "";
+                    // The description field acts as the subtitle/excerpt
+                    let textContent = item.description || "";
                     const excerpt = textContent.length > 120 
                         ? textContent.substring(0, 120).trim() + "..." 
                         : textContent;
 
-                    const author = item.author || "Ada Nemesis";
+                    // Pull author name natively if available
+                    let author = "Norfolk Folklore Society";
+                    if (item.authors && item.authors.length > 0) {
+                        author = item.authors[0].name;
+                    }
 
-                    // Build Card HTML
+                    // Build Card HTML using item.canonical_url
                     const cardHTML = `
-                        <a href="${item.link}" class="story-card" target="_blank">
+                        <a href="${item.canonical_url}" class="story-card" target="_blank">
                             <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
                             <div class="story-content">
                                 <h3>${item.title}</h3>
@@ -549,9 +547,9 @@
             // Function to render the Next/Prev and page numbers
             function renderPaginationControls(activePage) {
                 const totalPages = Math.ceil(allStories.length / storiesPerPage);
-                paginationContainer.innerHTML = ''; // Clear existing controls
+                paginationContainer.innerHTML = ''; 
 
-                if (totalPages <= 1) return; // Don't show pagination if there's only 1 page
+                if (totalPages <= 1) return; 
 
                 // Previous Button
                 const prevBtn = document.createElement('button');
