@@ -552,61 +552,41 @@
                 });
             }
 
-            // Function to render Previous/Next buttons
-            function renderPaginationControls(activePage, itemsReturned) {
-                paginationContainer.innerHTML = ''; 
+            // Function to fetch a specific page from the Substack API
+    function fetchPage(page) {
+        // Calculate how many stories to skip based on the current page
+        const offset = (page - 1) * storiesPerPage;
+        
+        const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerPage}&offset=${offset}`;
+        
+        // Switch to corsproxy.io for a much more reliable connection
+        const apiUrl = `https://corsproxy.io/?${encodeURIComponent(substackUrl)}`;
 
-                // Previous Button
-                const prevBtn = document.createElement('button');
-                prevBtn.innerHTML = '&#10094; Previous';
-                prevBtn.disabled = activePage === 1;
-                prevBtn.addEventListener('click', () => {
-                    currentPage--;
-                    fetchPage(currentPage);
-                    scrollToTop();
-                });
-                paginationContainer.appendChild(prevBtn);
+        // Show loading state
+        feedContainer.innerHTML = '<p class="loading-message">Summoning stories from the archive...</p>';
+        paginationContainer.innerHTML = ''; // Clear buttons while loading
 
-                // Next Button (Disable if we received fewer than 9 items, meaning it's the last page)
-                const nextBtn = document.createElement('button');
-                nextBtn.innerHTML = 'Next &#10095;';
-                nextBtn.disabled = itemsReturned < storiesPerPage;
-                nextBtn.addEventListener('click', () => {
-                    currentPage++;
-                    fetchPage(currentPage);
-                    scrollToTop();
-                });
-                paginationContainer.appendChild(nextBtn);
-            }
-
-            function scrollToTop() {
-                document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            // Scroll Animation Logic Setup
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            // Tell the observer to watch the initial elements (THIS WAS THE MISSING PIECE!)
-            document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
-                observer.observe(element);
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) throw new Error("Network response was not ok");
+                return response.json();
+            })
+            .then(data => {
+                // CorsProxy returns the clean array directly, so we no longer need to unpack it!
+                if (Array.isArray(data) && data.length > 0) {
+                    renderStories(data);
+                    renderPaginationControls(page, data.length);
+                } else if (page === 1) {
+                    feedContainer.innerHTML = '<p class="loading-message">No stories found at this time.</p>';
+                } else {
+                    feedContainer.innerHTML = '<p class="loading-message">You have reached the end of the archive.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching Substack API:', error);
+                feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
             });
-
-            // Initial load
-            fetchPage(currentPage);
-        });
+    }
     </script>
 </body>
 </html>
