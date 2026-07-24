@@ -9,7 +9,7 @@
     <!-- Google Fonts: Corben Regular & Sora Light -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Corben&family=Sora:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Corben&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
     
     <!-- FontAwesome for standard icons (Socials, Play, Plus) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,8 +19,9 @@
         :root {
             --primary-green: #375023; /* Dark earthy green */
             --secondary-green: #4b6b33; /* Lighter green */
-            --footer-green: #a7b799;
+            --footer-green: #a7b799; /* Sage green for footer */
             --text-light: #fdfdfd;
+            --text-dark: #333333;
             --font-headings: 'Corben', serif;
             --font-body: 'Sora', sans-serif;
         }
@@ -45,30 +46,27 @@
             font-weight: 400;
         }
 
-        /* 3. Sticky Header */
+        /* Header */
         header {
             position: sticky;
             top: 0;
             background-color: var(--primary-green);
             z-index: 1000;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* 1. Main Logo */
         .logo-container img {
-            max-width: 400px;
+            max-width: 600px;
             width: 90%;
             height: auto;
             margin-bottom: 1rem;
         }
 
-        /* 2. Navigation Links & Hover State */
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 2.5rem;
             list-style: none;
             flex-wrap: wrap;
         }
@@ -79,24 +77,27 @@
             font-size: 1.1rem;
             display: inline-block;
             transition: transform 0.3s ease, color 0.3s ease;
+            letter-spacing: 1px;
         }
 
-        .nav-links a:hover {
-            transform: scale(1.1); /* Enlarges slightly */
+        .nav-links a:hover, .nav-links a.active {
             color: #d1dfc1;
+            transform: scale(1.05);
         }
 
-        /* 5. Floating 'Join Us' Roundel */
+        /* Floating 'Join Us' Roundel */
         .floating-join {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 100px;
-            height: 100px;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 90px;
+            height: 90px;
             background-color: var(--secondary-green);
-            border: 2px solid var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
@@ -107,218 +108,305 @@
             z-index: 1001;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: transform 0.3s ease;
+            line-height: 1.1;
+        }
+
+        .floating-join img {
+            width: 30px;
+            margin-top: 5px;
         }
 
         .floating-join:hover {
-            transform: scale(1.1);
+            transform: translateY(-50%) scale(1.1);
         }
 
-        /* 4. Carousel Section */
+        /* Carousel Section */
         .carousel-container {
             position: relative;
             width: 100%;
-            height: 500px;
+            height: 450px;
             overflow: hidden;
+            background: url('images/ghost-bg-placeholder.jpg') center/cover no-repeat;
             background-color: #222;
         }
 
-        .carousel-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .carousel-slide.active {
-            opacity: 1;
-            z-index: 10;
-        }
-
-        /* Placeholder Colors for Carousel */
-        .slide-1 { background-color: #5a3c3c; }
-        .slide-2 { background-color: #3c5a5a; }
-        .slide-3 { background-color: #5a553c; }
-        .slide-4 { background-color: #3c3e5a; }
-        .slide-5 { background-color: #5a3c55; }
-
         .carousel-overlay {
             position: absolute;
-            bottom: 20%;
-            left: 10%;
-            background: rgba(55, 80, 35, 0.85); /* Semi-transparent green */
+            bottom: 15%;
+            left: 5%;
+            background: rgba(55, 80, 35, 0.85); /* Transparent background behind text */
             padding: 2rem;
             border-radius: 10px;
-            max-width: 400px;
+            max-width: 450px;
             z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .carousel-overlay h2 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .spotify-links {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin: 1rem 0;
-        }
-
-        .spotify-links a {
-            color: var(--text-light);
-            text-decoration: none;
             font-size: 1.2rem;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .carousel-overlay h3 {
+            font-size: 1.8rem;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.2;
+        }
+
+        .spotify-save {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: transform 0.2s ease;
+        }
+
+        .spotify-save a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .overlay-bottom {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+
+        .overlay-bottom p {
+            font-size: 0.85rem;
+            flex: 1;
+            margin: 0;
+            padding-right: 15px;
+        }
+
+        .play-btn {
+            color: var(--footer-green);
+            font-size: 3.5rem;
+            line-height: 1;
+            transition: transform 0.2s ease, color 0.2s ease;
         }
         
-        .spotify-links a:hover {
+        .play-btn:hover {
             transform: scale(1.05);
+            color: var(--text-light);
         }
-
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 1rem;
-            cursor: pointer;
-            z-index: 30;
-            font-size: 2rem;
-            transition: background 0.3s;
-        }
-
-        .carousel-arrow:hover { background: rgba(0,0,0,0.8); }
-        .arrow-left { left: 10px; }
-        .arrow-right { right: 10px; }
 
         /* Main Content Sections */
         .section-container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 4rem 2rem 2rem;
             text-align: center;
         }
 
         .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            gap: 15px;
         }
 
-        /* 7. Featured Stories Grid */
+        .section-title img {
+            height: 2rem;
+            width: auto;
+        }
+
+        /* Society Portraits Layout */
+        .society-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .portrait {
+            width: 220px;
+            height: auto;
+        }
+
+        .description-text {
+            flex: 1;
+            padding: 0 20px;
+            font-size: 0.95rem;
+        }
+
+        .tailpiece {
+            display: block;
+            margin: 25px auto 0;
+            width: 100px;
+            height: auto;
+        }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background-color: var(--secondary-green);
+            margin: 1rem auto 3rem;
+            width: 90%;
+        }
+
+        /* Featured Stories Grid */
         .stories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
+            margin-bottom: 4rem;
         }
 
         .story-card {
             background-color: white;
-            color: #333;
-            border-radius: 15px;
+            color: var(--text-dark);
+            border-radius: 12px;
             overflow: hidden;
             text-decoration: none;
-            display: block;
+            display: flex;
+            flex-direction: column;
             text-align: left;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .story-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        .story-img-placeholder {
+        .story-card img.hero-img {
             width: 100%;
-            height: 200px;
-            background-color: #ccc;
+            height: 220px;
+            object-fit: cover;
         }
 
         .story-content {
             padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
         }
 
         .story-content h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 0.5rem;
+            color: var(--primary-green);
         }
         
         .story-content .author-date {
-            font-size: 0.8rem;
-            color: #666;
+            font-size: 0.85rem;
+            color: #777;
             margin-bottom: 1rem;
-            font-weight: bold;
+            font-family: var(--font-body);
         }
 
-        /* 8 & 9. Footer */
+        .story-content .author-date strong {
+            color: var(--primary-green);
+        }
+
+        .story-content p.excerpt {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Footer matching "Home-page-example.jpg" */
         footer {
             background-color: var(--footer-green);
             color: var(--primary-green);
-            text-align: center;
-            padding: 4rem 2rem;
+            padding: 3rem 2rem;
         }
 
         .footer-content {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            gap: 1.5rem;
+            flex-wrap: wrap;
+            gap: 2rem;
         }
 
-        .social-icons {
+        .footer-left {
             display: flex;
-            gap: 1.5rem;
-            font-size: 2rem;
+            gap: 1rem;
+            flex: 1;
         }
 
         .social-icons a {
-            color: var(--primary-green);
+            background-color: white;
+            color: var(--footer-green);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
             transition: transform 0.3s ease;
         }
 
         .social-icons a:hover {
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
 
-        .footer-signup h2 {
-            margin-bottom: 1rem;
-            font-size: 2rem;
+        .footer-center {
+            text-align: center;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-center h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.2rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-center p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .btn-signup {
             background-color: var(--primary-green);
             color: var(--text-light);
-            padding: 1rem 2.5rem;
-            border-radius: 30px;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: inline-block;
             transition: transform 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
         }
 
         .btn-signup:hover {
-            transform: scale(1.1);
-            background-color: var(--secondary-green);
+            transform: scale(1.05);
+            background-color: #2b3d1b;
         }
 
-        /* 10. Animation Classes */
+        .footer-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Large circle placeholder in the footer design */
+        .footer-placeholder-circle {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+        }
+
+        /* Animation Classes */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -329,22 +417,38 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .society-content {
+                flex-direction: column;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-left {
+                justify-content: center;
+            }
+            .footer-right {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 3. Sticky Header -->
+    <!-- Header -->
     <header>
-        <!-- 1. Main Logo -->
         <div class="logo-container">
             <a href="index.html">
+                <!-- Ensure filename matches your repository perfectly -->
                 <img src="images/norfolk-folklore-society-logo-main.jpg" alt="Norfolk Folklore Society">
             </a>
         </div>
-        <!-- 2. Navigation -->
         <nav>
             <ul class="nav-links">
-                <li><a href="index.html">HOME</a></li>
+                <li><a href="index.html" class="active">HOME</a></li>
                 <li><a href="stories.html">STORIES</a></li>
                 <li><a href="map.html">MAP</a></li>
                 <li><a href="shop.html">SHOP</a></li>
@@ -354,186 +458,123 @@
         </nav>
     </header>
 
-    <!-- 5. Floating Join Us Roundel -->
-    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">JOIN<br>US</a>
+    <!-- Floating Join Us Roundel (Vertically centered as requested previously) -->
+    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
+        JOIN<br>US
+        <!-- Using the tailpiece graphic to match the subtle decoration in the mock-up -->
+        <img src="images/tailpiece.svg" alt="decoration">
+    </a>
 
     <main>
-        <!-- 4. Carousel Section -->
+        <!-- Carousel Section Restyled to Match Image -->
         <section class="carousel-container animate-on-scroll">
-            <!-- Arrows -->
-            <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
-            <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
-
-            <!-- Slide 1 -->
-            <div class="carousel-slide slide-1 active">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>Live at the Black Shuck Festival</h3>
-                    <div class="spotify-links">
-                        <!-- Plus Symbol for Spotify Save -->
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                        <!-- Triangle Symbol for Spotify Play -->
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-play fa-2x"></i></a>
-                    </div>
-                    <p>Add some description text here. Add some description text here. Add some description text here.</p>
+            <div class="carousel-overlay">
+                <h2>PODCAST</h2>
+                <h3>Live at the Black Shuck Festival</h3>
+                
+                <div class="spotify-save">
+                    <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
                 </div>
-            </div>
-            <!-- Slide 2 -->
-            <div class="carousel-slide slide-2">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>The Ghost Dogs of East Anglia</h3>
-                    <div class="spotify-links">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-play fa-2x"></i></a>
-                    </div>
-                    <p>Add some description text here. Add some description text here. Add some description text here.</p>
-                </div>
-            </div>
-            <!-- Slide 3 -->
-            <div class="carousel-slide slide-3">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>Witches of King's Lynn</h3>
-                    <div class="spotify-links">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-play fa-2x"></i></a>
-                    </div>
-                    <p>Add some description text here. Add some description text here. Add some description text here.</p>
-                </div>
-            </div>
-            <!-- Slide 4 -->
-            <div class="carousel-slide slide-4">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>Blickling Hall's Headless Queen</h3>
-                    <div class="spotify-links">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-play fa-2x"></i></a>
-                    </div>
-                    <p>Add some description text here. Add some description text here. Add some description text here.</p>
-                </div>
-            </div>
-            <!-- Slide 5 -->
-            <div class="carousel-slide slide-5">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>The Lantern Men of the Fens</h3>
-                    <div class="spotify-links">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-play fa-2x"></i></a>
-                    </div>
-                    <p>Add some description text here. Add some description text here. Add some description text here.</p>
+                
+                <div class="overlay-bottom">
+                    <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                    <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
                 </div>
             </div>
         </section>
 
-        <!-- About Section Placeholder -->
+        <!-- The Norfolk Folklore Society Section -->
         <section class="section-container animate-on-scroll">
-            <h2 class="section-title">&#10045; THE NORFOLK FOLKLORE SOCIETY &#10045;</h2>
-            <p style="max-width: 800px; margin: 0 auto;">Add some description text here. Add some description text here. Add some description text here. Add some description text here. Add some description text here.</p>
+            <div class="section-title">
+                <img src="images/header-decoration-left.svg" alt="Left Decoration">
+                <h2>THE NORFOLK FOLKLORE SOCIETY</h2>
+                <img src="images/header-decoration-right.svg" alt="Right Decoration">
+            </div>
+            
+            <div class="society-content">
+                <img src="images/siofra.png" alt="Siofra" class="portrait">
+                
+                <div class="description-text">
+                    <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                    <p style="margin-top: 1rem;">Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                    <img src="images/tailpiece.svg" alt="Tailpiece Graphic" class="tailpiece">
+                </div>
+
+                <img src="images/stacia.png" alt="Stacia" class="portrait">
+            </div>
+
+            <hr class="divider">
         </section>
 
-        <!-- 7. Featured Stories -->
-        <section class="section-container animate-on-scroll">
-            <h2 class="section-title">&#10045; FEATURED STORIES &#10045;</h2>
+        <!-- Featured Stories -->
+        <section class="section-container animate-on-scroll" style="padding-top: 1rem;">
+            <div class="section-title">
+                <img src="images/header-decoration-left.svg" alt="Left Decoration">
+                <h2>FEATURED STORIES</h2>
+                <img src="images/header-decoration-right.svg" alt="Right Decoration">
+            </div>
             
             <div class="stories-grid">
                 <!-- Story 1 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <div class="story-img-placeholder" style="background: url('https://via.placeholder.com/400x250/333/fff?text=Whirlwinds') center/cover;"></div>
+                    <img src="images/Featured%20Stories%201.png" alt="Whirlwinds" class="hero-img">
                     <div class="story-content">
                         <h3>The Norfolk whirlwinds sent by the Devil</h3>
-                        <p class="author-date">by Stacia Briggs | Dec 23, 2025</p>
-                        <p>Did the ghost of Old Roger whistle up sandstorms in order to foil German bombers intent on wiping out Breck...</p>
+                        <p class="author-date">by <strong>Stacia Briggs</strong><br>Dec 23, 2025</p>
+                        <p class="excerpt">Did the ghost of Old Roger whistle up sandstorms in order to foil German bombers intent on wiping out Breck-...</p>
                     </div>
                 </a>
 
                 <!-- Story 2 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <div class="story-img-placeholder" style="background: url('https://via.placeholder.com/400x250/333/fff?text=Vanishing+Mansions') center/cover;"></div>
+                    <img src="images/Featured%20Stories%202.png" alt="Vanishing Mansions" class="hero-img">
                     <div class="story-content">
                         <h3>The Norfolk mansions that vanish into thin air</h3>
-                        <p class="author-date">by Stacia Briggs | Oct 7, 2025</p>
-                        <p>Phantom houses are a rare but persistent phenomenon in East Anglia, with eerie tales of grand mansions appearing and vanishing...</p>
+                        <p class="author-date">by <strong>Stacia Briggs</strong><br>Oct 7, 2025</p>
+                        <p class="excerpt">Phantom houses are a rare but persistent phenomenon in East Anglia, with eerie tales of grand mansions appearing and vanishing...</p>
                     </div>
                 </a>
 
                 <!-- Story 3 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <div class="story-img-placeholder" style="background: url('https://via.placeholder.com/400x250/333/fff?text=Goat+Head') center/cover;"></div>
+                    <img src="images/Featured%20Stories%203.png" alt="Goat's Head" class="hero-img">
                     <div class="story-content">
                         <h3>The Cursed Goat's Head of Strumpshaw</h3>
-                        <p class="author-date">by Stacia Briggs | Jul 4, 2025</p>
-                        <p>The Mafia might have opted for a horse's head in the bedroom, but in Strumpshaw, it was the haunted head of a goat that left villagers trembling...</p>
+                        <p class="author-date">by <strong>Stacia Briggs</strong><br>Jul 4, 2025</p>
+                        <p class="excerpt">The Mafia might have opted for a horse's head in the bedroom, but in Strumpshaw, it was the haunted head of a goat that left villagers trembling...</p>
                     </div>
                 </a>
             </div>
         </section>
-
     </main>
 
-    <!-- 8 & 9. Footer -->
+    <!-- Footer Aligned Horizontally as in Home-page-example.jpg -->
     <footer class="animate-on-scroll">
         <div class="footer-content">
-            <div class="footer-signup">
-                <h2>JOIN US</h2>
-                <p>Sign up to our Substack newsletter</p>
-            </div>
-            
-            <!-- 8. Social Icons linking out -->
-            <div class="social-icons">
+            <!-- Left Side: Social Media -->
+            <div class="footer-left social-icons">
                 <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
                 <a href="https://spotify.com" target="_blank" aria-label="Spotify"><i class="fa-brands fa-spotify"></i></a>
             </div>
 
-            <!-- 9. Sign Up Button -->
-            <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
+            <!-- Center: Sign up Form -->
+            <div class="footer-center">
+                <h2>JOIN US</h2>
+                <p>Sign up to our Substack newsletter</p>
+                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
+            </div>
+
+            <!-- Right Side: Dark Green Circle Placeholder matching the image -->
+            <div class="footer-right">
+                <div class="footer-placeholder-circle"></div>
+            </div>
         </div>
     </footer>
 
-    <!-- JavaScript for Interactive Elements -->
+    <!-- JavaScript for Animations -->
     <script>
-        // 4. Carousel Logic
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const totalSlides = slides.length;
-        let slideInterval;
-
-        function showSlide(index) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            if (index >= totalSlides) {
-                currentSlide = 0;
-            } else if (index < 0) {
-                currentSlide = totalSlides - 1;
-            } else {
-                currentSlide = index;
-            }
-            slides[currentSlide].classList.add('active');
-        }
-
-        function moveSlide(step) {
-            showSlide(currentSlide + step);
-            resetInterval(); // Reset timer when user manually clicks
-        }
-
-        function startInterval() {
-            // Cycle through every 5 seconds (5000ms)
-            slideInterval = setInterval(() => {
-                showSlide(currentSlide + 1);
-            }, 5000); 
-        }
-
-        function resetInterval() {
-            clearInterval(slideInterval);
-            startInterval();
-        }
-
-        // Initialize Carousel
-        startInterval();
-
-        // 10. Scroll Animation Logic
+        // Scroll Animation Logic
         const observerOptions = {
             root: null,
             rootMargin: '0px',
@@ -544,7 +585,7 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); // Only animate once
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
