@@ -468,38 +468,44 @@
             let currentPage = 1;
 
             // Function to fetch a specific page from the Substack API
-            function fetchPage(page) {
-                // Calculate how many stories to skip based on the current page
-                const offset = (page - 1) * storiesPerPage;
-                
-                // Use limit and offset to only pull 9 stories at a time
-                const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerPage}&offset=${offset}`;
-                const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(substackUrl)}`;
+    function fetchPage(page) {
+        // Calculate how many stories to skip based on the current page
+        const offset = (page - 1) * storiesPerPage;
+        
+        // Add a timestamp cache-buster so the proxy doesn't hang on repeat requests
+        const cacheBuster = Date.now();
+        const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerPage}&offset=${offset}&_cb=${cacheBuster}`;
+        
+        // Switch to the stable '/get' proxy endpoint
+        const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(substackUrl)}`;
 
-                // Show loading state
-                feedContainer.innerHTML = '<p class="loading-message">Summoning stories from the archive...</p>';
-                paginationContainer.innerHTML = ''; // Clear buttons while loading
+        // Show loading state
+        feedContainer.innerHTML = '<p class="loading-message">Summoning stories from the archive...</p>';
+        paginationContainer.innerHTML = ''; // Clear buttons while loading
 
-                fetch(apiUrl)
-                    .then(response => {
-                        if (!response.ok) throw new Error("Network response was not ok");
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (Array.isArray(data) && data.length > 0) {
-                            renderStories(data);
-                            renderPaginationControls(page, data.length);
-                        } else if (page === 1) {
-                            feedContainer.innerHTML = '<p class="loading-message">No stories found at this time.</p>';
-                        } else {
-                            feedContainer.innerHTML = '<p class="loading-message">You have reached the end of the archive.</p>';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching Substack API:', error);
-                        feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
-                    });
-            }
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) throw new Error("Network response was not ok");
+                return response.json();
+            })
+            .then(proxyData => {
+                // The stable endpoint wraps the Substack data inside a 'contents' string, so we unpack it here:
+                const data = JSON.parse(proxyData.contents);
+
+                if (Array.isArray(data) && data.length > 0) {
+                    renderStories(data);
+                    renderPaginationControls(page, data.length);
+                } else if (page === 1) {
+                    feedContainer.innerHTML = '<p class="loading-message">No stories found at this time.</p>';
+                } else {
+                    feedContainer.innerHTML = '<p class="loading-message">You have reached the end of the archive.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching Substack API:', error);
+                feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
+            });
+    }
 
             // Function to render the fetched stories to the grid
             function renderStories(stories) {
