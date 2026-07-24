@@ -285,7 +285,6 @@
         .portrait {
             width: 220px;
             height: auto;
-            transform-origin: center center;
         }
 
         .description-text {
@@ -472,6 +471,10 @@
             transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* Scale up from center (Portraits Entrance) */
         .portrait-animate {
@@ -480,12 +483,20 @@
             transform-origin: center center;
             transition: opacity 1s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .portrait-animate.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
 
         /* Slide in from left */
         .slide-in-left {
             opacity: 0;
             transform: translateX(-50px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-in-left.is-visible {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         /* Slide in from right */
@@ -494,11 +505,9 @@
             transform: translateX(50px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-
-        /* Universal visible state */
-        .is-visible {
+        .slide-in-right.is-visible {
             opacity: 1;
-            transform: translateY(0) scale(1) translateX(0);
+            transform: translateX(0);
         }
 
         /* Responsive */
