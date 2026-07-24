@@ -593,6 +593,11 @@
                 });
             }, observerOptions);
 
+            // Tell the observer to watch the initial elements (THIS WAS THE MISSING PIECE!)
+            document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
+                observer.observe(element);
+            });
+
             // Initial load
             fetchPage(currentPage);
         });
