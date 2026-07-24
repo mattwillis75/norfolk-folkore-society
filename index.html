@@ -20,6 +20,7 @@
             --primary-green: #375023; /* Dark earthy green */
             --secondary-green: #4b6b33; /* Lighter green */
             --footer-green: #a7b799; /* Sage green for footer */
+            --accent-line: #889b77; /* Color for borders and lines */
             --text-light: #fdfdfd;
             --text-dark: #333333;
             --font-headings: 'Corben', serif;
@@ -54,6 +55,7 @@
             z-index: 1000;
             padding: 1.5rem 0;
             text-align: center;
+            border-bottom: 4px solid var(--accent-line); /* Added line at bottom of header */
         }
 
         .logo-container img {
@@ -126,15 +128,32 @@
             width: 100%;
             height: 450px;
             overflow: hidden;
-            background: url('images/ghost-bg-placeholder.jpg') center/cover no-repeat;
             background-color: #222;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            z-index: 10;
         }
 
         .carousel-overlay {
             position: absolute;
             bottom: 15%;
             left: 5%;
-            background: rgba(55, 80, 35, 0.85); /* Transparent background behind text */
+            background: rgba(55, 80, 35, 0.85);
             padding: 2rem;
             border-radius: 10px;
             max-width: 450px;
@@ -169,6 +188,11 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            transition: transform 0.2s ease;
+        }
+        
+        .spotify-save a:hover {
+            transform: scale(1.05);
         }
 
         .overlay-bottom {
@@ -197,11 +221,33 @@
             color: var(--text-light);
         }
 
+        /* Carousel Navigation Arrows */
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            z-index: 30;
+            font-size: 2rem;
+            transition: background 0.3s;
+        }
+
+        .carousel-arrow:hover { 
+            background: rgba(0,0,0,0.8); 
+        }
+        
+        .arrow-left { left: 10px; }
+        .arrow-right { right: 10px; }
+
         /* Main Content Sections */
         .section-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 4rem 2rem 2rem;
+            padding: 4rem 2rem 0;
             text-align: center;
         }
 
@@ -222,11 +268,11 @@
         /* Society Portraits Layout */
         .society-content {
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* Aligns items to the top */
             justify-content: space-between;
             gap: 30px;
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 0; /* Reset for better control of divider spacing */
         }
 
         .portrait {
@@ -249,9 +295,9 @@
 
         .divider {
             border: 0;
-            height: 1px;
-            background-color: var(--secondary-green);
-            margin: 1rem auto 3rem;
+            height: 4px; /* Increased to 4px */
+            background-color: var(--accent-line); /* Changed color */
+            margin: 3rem auto; /* Creates equal 3rem spacing above and below */
             width: 90%;
         }
 
@@ -315,7 +361,7 @@
             line-height: 1.5;
         }
 
-        /* Footer matching "Home-page-example.jpg" */
+        /* Footer */
         footer {
             background-color: var(--footer-green);
             color: var(--primary-green);
@@ -398,7 +444,6 @@
             justify-content: flex-end;
         }
 
-        /* Large circle placeholder in the footer design */
         .footer-placeholder-circle {
             width: 100px;
             height: 100px;
@@ -422,6 +467,7 @@
         @media (max-width: 768px) {
             .society-content {
                 flex-direction: column;
+                align-items: center;
             }
             .footer-content {
                 flex-direction: column;
@@ -442,8 +488,8 @@
     <header>
         <div class="logo-container">
             <a href="index.html">
-                <!-- Ensure filename matches your repository perfectly -->
-                <img src="images/norfolk-folklore-society-logo-main.jpg" alt="Norfolk Folklore Society">
+                <!-- Logo updated to .png extension -->
+                <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society">
             </a>
         </div>
         <nav>
@@ -458,36 +504,100 @@
         </nav>
     </header>
 
-    <!-- Floating Join Us Roundel (Vertically centered as requested previously) -->
+    <!-- Floating Join Us Roundel -->
     <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
         JOIN<br>US
-        <!-- Using the tailpiece graphic to match the subtle decoration in the mock-up -->
         <img src="images/tailpiece.svg" alt="decoration">
     </a>
 
     <main>
-        <!-- Carousel Section Restyled to Match Image -->
+        <!-- Carousel Section Restored with 5 Images and Arrows -->
         <section class="carousel-container animate-on-scroll">
-            <div class="carousel-overlay">
-                <h2>PODCAST</h2>
-                <h3>Live at the Black Shuck Festival</h3>
-                
-                <div class="spotify-save">
-                    <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
+            <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
+
+            <!-- Slide 1 -->
+            <div class="carousel-slide slide-1 active" style="background-image: url('images/carousel-1.jpg');">
+                <div class="carousel-overlay">
+                    <h2>PODCAST</h2>
+                    <h3>Live at the Black Shuck Festival</h3>
+                    <div class="spotify-save">
+                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
+                    </div>
+                    <div class="overlay-bottom">
+                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
+                    </div>
                 </div>
-                
-                <div class="overlay-bottom">
-                    <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
-                    <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-slide slide-2" style="background-image: url('images/carousel-2.jpg');">
+                <div class="carousel-overlay">
+                    <h2>PODCAST</h2>
+                    <h3>The Ghost Dogs of East Anglia</h3>
+                    <div class="spotify-save">
+                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
+                    </div>
+                    <div class="overlay-bottom">
+                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-slide slide-3" style="background-image: url('images/carousel-3.jpg');">
+                <div class="carousel-overlay">
+                    <h2>PODCAST</h2>
+                    <h3>Witches of King's Lynn</h3>
+                    <div class="spotify-save">
+                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
+                    </div>
+                    <div class="overlay-bottom">
+                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="carousel-slide slide-4" style="background-image: url('images/carousel-4.jpg');">
+                <div class="carousel-overlay">
+                    <h2>PODCAST</h2>
+                    <h3>Blickling Hall's Headless Queen</h3>
+                    <div class="spotify-save">
+                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
+                    </div>
+                    <div class="overlay-bottom">
+                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5 -->
+            <div class="carousel-slide slide-5" style="background-image: url('images/carousel-5.jpg');">
+                <div class="carousel-overlay">
+                    <h2>PODCAST</h2>
+                    <h3>The Lantern Men of the Fens</h3>
+                    <div class="spotify-save">
+                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
+                    </div>
+                    <div class="overlay-bottom">
+                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
+                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- The Norfolk Folklore Society Section -->
+        <!-- About Us Section -->
         <section class="section-container animate-on-scroll">
             <div class="section-title">
                 <img src="images/header-decoration-left.svg" alt="Left Decoration">
-                <h2>THE NORFOLK FOLKLORE SOCIETY</h2>
+                <!-- Heading changed to ABOUT US -->
+                <h2>ABOUT US</h2>
                 <img src="images/header-decoration-right.svg" alt="Right Decoration">
             </div>
             
@@ -502,12 +612,13 @@
 
                 <img src="images/stacia.png" alt="Stacia" class="portrait">
             </div>
-
-            <hr class="divider">
         </section>
 
-        <!-- Featured Stories -->
-        <section class="section-container animate-on-scroll" style="padding-top: 1rem;">
+        <!-- Centered, uniformly spaced divider -->
+        <hr class="divider animate-on-scroll">
+
+        <!-- Featured Stories (Top padding set to 0 to keep spacing perfectly equal from the divider) -->
+        <section class="section-container animate-on-scroll" style="padding-top: 0;">
             <div class="section-title">
                 <img src="images/header-decoration-left.svg" alt="Left Decoration">
                 <h2>FEATURED STORIES</h2>
@@ -548,7 +659,7 @@
         </section>
     </main>
 
-    <!-- Footer Aligned Horizontally as in Home-page-example.jpg -->
+    <!-- Footer -->
     <footer class="animate-on-scroll">
         <div class="footer-content">
             <!-- Left Side: Social Media -->
@@ -565,15 +676,52 @@
                 <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
             </div>
 
-            <!-- Right Side: Dark Green Circle Placeholder matching the image -->
+            <!-- Right Side: Dark Green Circle Placeholder -->
             <div class="footer-right">
                 <div class="footer-placeholder-circle"></div>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript for Animations -->
+    <!-- JavaScript for Animations and Carousel -->
     <script>
+        // Carousel Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            if (index >= totalSlides) {
+                currentSlide = 0;
+            } else if (index < 0) {
+                currentSlide = totalSlides - 1;
+            } else {
+                currentSlide = index;
+            }
+            slides[currentSlide].classList.add('active');
+        }
+
+        function moveSlide(step) {
+            showSlide(currentSlide + step);
+            resetInterval();
+        }
+
+        function startInterval() {
+            slideInterval = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 5000); 
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startInterval();
+        }
+
+        // Initialize Carousel
+        startInterval();
+
         // Scroll Animation Logic
         const observerOptions = {
             root: null,
