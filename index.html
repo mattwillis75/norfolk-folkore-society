@@ -55,12 +55,12 @@
             z-index: 1000;
             padding: 1.5rem 0;
             text-align: center;
-            border-bottom: 2px solid var(--accent-line); /* Adjusted to 2px */
+            border-bottom: 2px solid var(--accent-line);
         }
 
         .logo-container img {
-            max-width: 600px;
-            width: 90%;
+            max-width: 750px; /* Increased to stretch wider than nav links */
+            width: 95%;
             height: auto;
             margin-bottom: 1rem;
         }
@@ -253,7 +253,7 @@
 
         .section-title {
             font-size: 2rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem; /* Matched to divider 3rem to create equal spacing */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -261,14 +261,14 @@
         }
 
         .section-title h2 {
-            line-height: 1; /* Eliminates extra vertical spacing */
+            line-height: 1; 
             margin: 0;
-            padding-top: 3px; /* Minor optical adjustment to perfectly level with SVGs */
         }
 
         .section-title img {
             height: 2rem;
             width: auto;
+            transform: translateY(6px); /* Nudged down to align perfectly with text */
         }
 
         /* Society Portraits Layout */
@@ -301,7 +301,7 @@
 
         .divider {
             border: 0;
-            height: 2px; /* Adjusted to 2px */
+            height: 2px;
             background-color: var(--accent-line);
             margin: 3rem auto;
             width: 90%;
@@ -329,7 +329,7 @@
 
         .story-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Added white glow */
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); 
         }
 
         .story-card img.hero-img {
@@ -408,26 +408,25 @@
             transform: scale(1.1);
         }
 
-        /* Pulled elements closer together */
         .footer-center {
             text-align: center;
             flex: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem; /* Tighter gap */
+            gap: 0.5rem; 
         }
 
         .footer-center h2 {
             font-size: 2.2rem;
-            margin: 0; /* Removed margin */
+            margin: 0; 
             letter-spacing: 1px;
             line-height: 1;
         }
 
         .footer-center p {
             font-size: 1.2rem;
-            margin: 0 0 0.5rem 0; /* Tightened spacing to button */
+            margin: 0 0 0.5rem 0; 
         }
 
         .btn-signup {
@@ -524,7 +523,6 @@
     <header>
         <div class="logo-container">
             <a href="index.html">
-                <!-- Lazy loading applied to logo -->
                 <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society" loading="lazy">
             </a>
         </div>
@@ -631,14 +629,12 @@
         <!-- About Us Section -->
         <section class="section-container animate-on-scroll">
             <div class="section-title">
-                <!-- Added slide animation classes & lazy loading -->
                 <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
                 <h2>ABOUT US</h2>
                 <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
             <div class="society-content">
-                <!-- Added portrait animation class & lazy loading -->
                 <img src="images/siofra.png" alt="Siofra" class="portrait portrait-animate" loading="lazy">
                 
                 <div class="description-text">
@@ -647,7 +643,6 @@
                     <img src="images/tailpiece.svg" alt="Tailpiece Graphic" class="tailpiece" loading="lazy">
                 </div>
 
-                <!-- Added portrait animation class & lazy loading -->
                 <img src="images/stacia.png" alt="Stacia" class="portrait portrait-animate" loading="lazy">
             </div>
         </section>
@@ -657,7 +652,6 @@
         <!-- Featured Stories -->
         <section class="section-container animate-on-scroll" style="padding-top: 0;">
             <div class="section-title">
-                <!-- Added slide animation classes & lazy loading -->
                 <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
                 <h2>FEATURED STORIES</h2>
                 <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
@@ -666,7 +660,6 @@
             <div class="stories-grid">
                 <!-- Story 1 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <!-- Added lazy loading -->
                     <img src="images/Featured%20Stories%201.png" alt="Whirlwinds" class="hero-img" loading="lazy">
                     <div class="story-content">
                         <h3>The Norfolk whirlwinds sent by the Devil</h3>
@@ -677,7 +670,6 @@
 
                 <!-- Story 2 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <!-- Added lazy loading -->
                     <img src="images/Featured%20Stories%202.png" alt="Vanishing Mansions" class="hero-img" loading="lazy">
                     <div class="story-content">
                         <h3>The Norfolk mansions that vanish into thin air</h3>
@@ -688,7 +680,6 @@
 
                 <!-- Story 3 -->
                 <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <!-- Added lazy loading -->
                     <img src="images/Featured%20Stories%203.png" alt="Goat's Head" class="hero-img" loading="lazy">
                     <div class="story-content">
                         <h3>The Cursed Goat's Head of Strumpshaw</h3>
@@ -778,7 +769,6 @@
             });
         }, observerOptions);
 
-        // Expanded querySelector to track newly added animation classes
         document.querySelectorAll('.animate-on-scroll, .portrait-animate, .slide-in-left, .slide-in-right').forEach(element => {
             observer.observe(element);
         });
