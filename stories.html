@@ -496,7 +496,7 @@
 const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerPage}&offset=${offset}`;
 
 // Use your private Cloudflare Worker proxy! (Replace with your actual worker URL)
-const proxyBase = 'https://folklore-proxy.your-username.workers.dev/?url=';
+const proxyBase = 'https://little-mountain-e182.thefolklorebox.workers.dev/?url=';
 const apiUrl = proxyBase + encodeURIComponent(substackUrl);
 
                 feedContainer.innerHTML = '<p class="loading-message">Summoning stories from the archive...</p>';
