@@ -454,7 +454,7 @@
         /* Shuck Footer Animation */
         .shuck-container {
             position: relative;
-            width: 120px; /* Slightly wider than the original 100px circle to allow for the glow */
+            width: 120px; 
         }
 
         .shuck-img {
@@ -476,13 +476,14 @@
 
         @keyframes pulse-glow {
             0% {
-                filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.3));
+                filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.4));
             }
             50% {
-                filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.9));
+                /* Stacked drop-shadows create a much larger and brighter glow */
+                filter: drop-shadow(0 0 20px rgba(255, 0, 0, 1)) drop-shadow(0 0 45px rgba(255, 0, 0, 0.8));
             }
             100% {
-                filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.3));
+                filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.4));
             }
         }
 
