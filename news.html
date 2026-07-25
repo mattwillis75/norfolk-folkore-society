@@ -276,11 +276,15 @@
             line-height: 1.2; 
         }
         
-        .entry-text p { 
-            font-size: 1.1rem; 
-            line-height: 1.8; 
-            margin-bottom: 1.5rem; 
+        .entry-text, .entry-text p { 
+            font-size: 1rem;       /* Matches the first paragraph's size */
+            line-height: 1.6;      /* Matches the first paragraph's spacing */
             text-align: left; 
+        }
+
+        .entry-text p { 
+            margin-bottom: 1.5rem; 
+            margin-top: 0;
         }
         
         .entry-keywords { 
