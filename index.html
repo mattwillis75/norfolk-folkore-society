@@ -464,15 +464,33 @@
             z-index: 1;
         }
 
-        .eye-glow {
+        .eyes-base-img {
+            /* This image is totally static */
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 2;
-            transform-origin: center center;
+        }
+
+        .eye-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
             animation: pulse-size 2.5s infinite ease-in-out;
+        }
+
+        /* X and Y coordinates (percentages) to anchor the scaling. */
+        .eye-glow-left {
+            transform-origin: 38% 38%; 
+        }
+
+        .eye-glow-right {
+            transform-origin: 62% 38%; 
         }
 
         @keyframes pulse-size {
@@ -658,8 +676,9 @@
             <div class="footer-right">
                 <div class="shuck-container">
                     <img src="images/Shuck.png" alt="Black Shuck" class="shuck-img" loading="lazy">
-                    <img src="images/left-eye-glow.png" alt="Left Eye Glow" class="eye-glow" loading="lazy">
-                    <img src="images/right-eye-glow.png" alt="Right Eye Glow" class="eye-glow" loading="lazy">
+                    <img src="images/Eyes.png" alt="Base Eyes" class="eyes-base-img" loading="lazy">
+                    <img src="images/left-eye-glow.png" alt="Left Eye Glow" class="eye-glow eye-glow-left" loading="lazy">
+                    <img src="images/right-eye-glow.png" alt="Right Eye Glow" class="eye-glow eye-glow-right" loading="lazy">
                 </div>
             </div>
         </div>
