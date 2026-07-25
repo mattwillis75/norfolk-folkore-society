@@ -273,11 +273,16 @@
             border-radius: 50%;
         }
 
-        /* Animation Classes */
+        /* -----------------------
+           ANIMATION CLASSES
+           (Now with slight delays so they run visibly after load)
+           ----------------------- */
+           
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            /* Added 0.2s delay to the main fade up */
+            transition: opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s;
         }
         .animate-on-scroll.is-visible {
             opacity: 1;
@@ -287,7 +292,8 @@
         .slide-in-left {
             opacity: 0;
             transform: translateX(-50px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            /* Added 0.4s delay so images wait for the section to appear */
+            transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
         }
         .slide-in-left.is-visible {
             opacity: 1;
@@ -297,7 +303,8 @@
         .slide-in-right {
             opacity: 0;
             transform: translateX(50px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            /* Added 0.4s delay */
+            transition: opacity 0.8s ease-out 0.4s, transform 0.8s ease-out 0.4s;
         }
         .slide-in-right.is-visible {
             opacity: 1;
@@ -333,7 +340,6 @@
         </div>
         <nav>
             <ul class="nav-links">
-                <!-- Note: The 'active' class is now on the MAP link -->
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="stories.html">STORIES</a></li>
                 <li><a href="map.html" class="active">MAP</a></li>
@@ -360,7 +366,7 @@
             </div>
             
             <div class="map-container">
-                <!-- Google My Maps Embed (viewer replaced with embed in URL) -->
+                <!-- Google My Maps Embed -->
                 <iframe src="https://www.google.com/maps/d/embed?mid=1E87YCw5PMWmJswTTs0VwCSa3ki9_h8k&ehbc=2D3142" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
 
