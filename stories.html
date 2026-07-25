@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stories - The Norfolk Folklore Society</title>
-    <meta name="description" content="Explore the myths, legends, and history of Norfolk with The Norfolk Folklore Society. Read our featured stories pulled directly from our archives.">
+    <title>Stories | The Norfolk Folklore Society</title>
+    <meta name="description" content="Read the latest myths, legends, and history from The Norfolk Folklore Society archive.">
     
     <!-- Google Fonts: Corben Regular & Sora Light -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,9 +126,8 @@
         .section-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 4rem 2rem 4rem;
             text-align: center;
-            min-height: 60vh;
         }
 
         .section-title {
@@ -143,6 +142,7 @@
         .section-title h2 {
             line-height: 1; 
             margin: 0;
+            text-transform: uppercase;
         }
 
         .section-title img {
@@ -155,7 +155,7 @@
         /* Stories Grid */
         .stories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
@@ -211,7 +211,7 @@
             font-size: 0.9rem;
             line-height: 1.5;
         }
-        
+
         .loading-message {
             grid-column: 1 / -1;
             font-size: 1.2rem;
@@ -219,39 +219,25 @@
             padding: 2rem;
         }
 
-        /* Pagination Controls */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 3rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .pagination button {
-            background-color: transparent;
+        /* Button */
+        .btn-signup {
+            background-color: var(--primary-green);
             color: var(--text-light);
-            border: 1px solid var(--accent-line);
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+            border: 2px solid var(--accent-line);
             cursor: pointer;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border-radius: 4px;
+            font-family: var(--font-headings);
         }
 
-        .pagination button.active, .pagination button:hover:not(:disabled) {
-            background-color: var(--secondary-green);
-            color: white;
-            border-color: var(--text-light);
-        }
-
-        .pagination button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            border-color: rgba(255, 255, 255, 0.2);
+        .btn-signup:hover {
+            transform: scale(1.05);
+            background-color: #2b3d1b;
         }
 
         /* Footer */
@@ -316,23 +302,6 @@
             margin: 0 0 0.5rem 0; 
         }
 
-        .btn-signup {
-            background-color: var(--primary-green);
-            color: var(--text-light);
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            display: inline-block;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .btn-signup:hover {
-            transform: scale(1.05);
-            background-color: #2b3d1b;
-        }
-
         .footer-right {
             flex: 1;
             display: flex;
@@ -356,6 +325,7 @@
             opacity: 1;
             transform: translateY(0);
         }
+
         .slide-in-left {
             opacity: 0;
             transform: translateX(-50px);
@@ -365,6 +335,7 @@
             opacity: 1;
             transform: translateX(0);
         }
+
         .slide-in-right {
             opacity: 0;
             transform: translateX(50px);
@@ -412,27 +383,29 @@
     </header>
 
     <!-- Floating Join Us Roundel -->
-    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join" target="_blank">
+    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
         JOIN<br>US
         <img src="images/tailpiece.svg" alt="decoration" loading="lazy">
     </a>
 
     <main>
-        <!-- Dynamic Stories Section -->
+        <!-- Featured Stories Section -->
         <section class="section-container animate-on-scroll">
             <div class="section-title">
                 <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
-                <h2>ALL STORIES</h2>
+                <h2>THE ARCHIVE</h2>
                 <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
-            <div class="stories-grid" id="substack-feed">
-                <p class="loading-message">Summoning stories from the archive...</p>
+            <div class="stories-grid" id="featured-stories-grid">
+                <p class="loading-message" id="initial-loading">Summoning stories from the archive...</p>
+                <!-- Cards will inject here via JavaScript -->
             </div>
 
-            <!-- Pagination container -->
-            <div class="pagination" id="pagination-controls"></div>
-
+            <!-- Load More Button -->
+            <div style="text-align: center; margin-top: 3rem;">
+                <button id="loadMoreBtn" class="btn-signup" style="display: none;">Load More Stories</button>
+            </div>
         </section>
     </main>
 
@@ -448,7 +421,7 @@
             <div class="footer-center">
                 <h2>JOIN US</h2>
                 <p>Sign up to our Substack newsletter</p>
-                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup" target="_blank">Sign Up Here</a>
+                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
             </div>
 
             <div class="footer-right">
@@ -457,164 +430,136 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Substack Integration and Animations -->
+    <!-- JavaScript -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    
-    const feedContainer = document.getElementById('substack-feed');
-    const paginationContainer = document.getElementById('pagination-controls');
-    
-    let allStories = [];
-    const storiesPerPage = 9;
-    let currentPage = 1;
+        // Set up the Scroll Observer for animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
 
-    // 1. Initialize the scroll observer immediately so the section fades in
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
-        observer.observe(element);
-    });
-
-    // 2. Fetch ALL 200 stories in ONE request using your private worker
-    const substackUrl = 'https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=54';
-    const proxyBase = 'https://little-mountain-e182.thefolklorebox.workers.dev/?url=';
-    const apiUrl = proxyBase + encodeURIComponent(substackUrl);
-
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 429) throw new Error("Rate Limited");
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (Array.isArray(data) && data.length > 0) {
-                allStories = data;
-                renderPage(currentPage);
-            } else {
-                feedContainer.innerHTML = '<p class="loading-message">Unable to load stories at this time.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching Substack API:', error);
-            if (error.message === "Rate Limited") {
-                 feedContainer.innerHTML = '<p class="loading-message">The archive is taking a quick breather. Please refresh the page in a few minutes.</p>';
-            } else {
-                 feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
-            }
-        });
-
-    // 3. Render 9 stories for the current page straight from memory
-    function renderPage(page) {
-        feedContainer.innerHTML = ''; 
-        
-        const startIndex = (page - 1) * storiesPerPage;
-        const endIndex = startIndex + storiesPerPage;
-        const storiesToDisplay = allStories.slice(startIndex, endIndex);
-
-        storiesToDisplay.forEach(item => {
-            const dateObj = new Date(item.post_date);
-            const formattedDate = dateObj.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
             });
+        }, observerOptions);
 
-            const imageUrl = item.cover_image || 'images/Featured%20Stories%201.png';
-            
-            let textContent = item.description || "";
-            const excerpt = textContent.length > 120 
-                ? textContent.substring(0, 120).trim() + "..." 
-                : textContent;
-
-            let author = "Ada Nemesis";
-            if (item.authors && item.authors.length > 0) {
-                author = item.authors[0].name;
-            }
-
-            const cardHTML = `
-                <a href="${item.canonical_url}" class="story-card animate-on-scroll" target="_blank">
-                    <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
-                    <div class="story-content">
-                        <h3>${item.title}</h3>
-                        <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
-                        <p class="excerpt">${excerpt}</p>
-                    </div>
-                </a>
-            `;
-            
-            feedContainer.insertAdjacentHTML('beforeend', cardHTML);
-        });
-
-        // Force the observer to watch the brand new story cards so they fade in
-        document.querySelectorAll('.story-card').forEach(element => {
+        // Observe initial static elements
+        document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
             observer.observe(element);
         });
 
-        renderPaginationControls(page);
+        // Substack API Fetch Logic with Pagination
+        const featuredGrid = document.getElementById('featured-stories-grid');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const initialLoading = document.getElementById('initial-loading');
         
-        // Scroll back to the top of the stories section on page change
-        if (page > 1) {
-            document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
+        let currentOffset = 0;
+        const storiesPerLoad = 9;
+        
+        function fetchStories() {
+            // Change button text to indicate loading state
+            const originalBtnText = loadMoreBtn.innerText;
+            loadMoreBtn.innerText = 'Summoning...';
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.style.opacity = '0.7';
+
+            const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerLoad}&offset=${currentOffset}`;
+            const proxyBase = 'https://little-mountain-e182.thefolklorebox.workers.dev/?url=';
+            const apiUrl = proxyBase + encodeURIComponent(substackUrl);
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok");
+                    return response.json();
+                })
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        // Clear the initial loading text if this is the first batch
+                        if (currentOffset === 0 && initialLoading) {
+                            initialLoading.remove(); 
+                            loadMoreBtn.style.display = 'inline-block'; // Show button
+                        }
+
+                        data.forEach(item => {
+                            const dateObj = new Date(item.post_date);
+                            const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                                month: 'short', day: 'numeric', year: 'numeric' 
+                            });
+
+                            // Fallback image in case the post doesn't have one
+                            const imageUrl = item.cover_image || 'images/norfolk-folklore-society-logo-main.png'; 
+                            
+                            let textContent = item.description || "";
+                            const excerpt = textContent.length > 120 
+                                ? textContent.substring(0, 120).trim() + "..." 
+                                : textContent;
+
+                            let author = "Ada Nemesis";
+                            if (item.authors && item.authors.length > 0) {
+                                author = item.authors[0].name;
+                            }
+
+                            // Build the card HTML
+                            const card = document.createElement('a');
+                            card.href = item.canonical_url;
+                            card.className = "story-card animate-on-scroll";
+                            card.target = "_blank";
+                            card.innerHTML = `
+                                <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
+                                <div class="story-content">
+                                    <h3>${item.title}</h3>
+                                    <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
+                                    <p class="excerpt">${excerpt}</p>
+                                </div>
+                            `;
+                            
+                            // Append card to grid and observe it so it animates in properly
+                            featuredGrid.appendChild(card);
+                            observer.observe(card);
+                        });
+
+                        // Update the offset ready for the next click
+                        currentOffset += storiesPerLoad;
+
+                        // If Substack returns fewer stories than we asked for, we've reached the end
+                        if (data.length < storiesPerLoad) {
+                            loadMoreBtn.style.display = 'none';
+                        } else {
+                            // Reset button ready for next click
+                            loadMoreBtn.innerText = 'Load More Stories';
+                            loadMoreBtn.disabled = false;
+                            loadMoreBtn.style.opacity = '1';
+                        }
+                    } else {
+                        if (currentOffset === 0) {
+                            featuredGrid.innerHTML = '<p class="loading-message">No stories found at this time.</p>';
+                        }
+                        loadMoreBtn.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching Substack API:', error);
+                    if (currentOffset === 0) {
+                        featuredGrid.innerHTML = '<p class="loading-message">The archive resists our summoning. Please try again later.</p>';
+                    } else {
+                        alert("Trouble connecting to the archive. Please try again.");
+                    }
+                    loadMoreBtn.innerText = 'Load More Stories';
+                    loadMoreBtn.disabled = false;
+                    loadMoreBtn.style.opacity = '1';
+                });
         }
-    }
 
-    // 4. Render the pagination buttons
-    function renderPaginationControls(activePage) {
-        const totalPages = Math.ceil(allStories.length / storiesPerPage);
-        paginationContainer.innerHTML = ''; 
-
-        if (totalPages <= 1) return; 
-
-        // Previous Button
-        const prevBtn = document.createElement('button');
-        prevBtn.innerHTML = '&#10094; Prev';
-        prevBtn.disabled = activePage === 1;
-        prevBtn.addEventListener('click', () => {
-            currentPage--;
-            renderPage(currentPage);
-        });
-        paginationContainer.appendChild(prevBtn);
-
-        // Page Number Buttons
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.innerText = i;
-            if (i === activePage) {
-                pageBtn.classList.add('active');
-            }
-            pageBtn.addEventListener('click', () => {
-                currentPage = i;
-                renderPage(currentPage);
-            });
-            paginationContainer.appendChild(pageBtn);
-        }
-
-        // Next Button
-        const nextBtn = document.createElement('button');
-        nextBtn.innerHTML = 'Next &#10095;';
-        nextBtn.disabled = activePage === totalPages;
-        nextBtn.addEventListener('click', () => {
-            currentPage++;
-            renderPage(currentPage);
-        });
-        paginationContainer.appendChild(nextBtn);
-    }
-});
+        // Load the first batch automatically when the page loads
+        document.addEventListener("DOMContentLoaded", fetchStories);
+        
+        // Load the next batch when the button is clicked
+        loadMoreBtn.addEventListener('click', fetchStories);
     </script>
 </body>
 </html>
