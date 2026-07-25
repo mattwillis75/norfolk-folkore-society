@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Corben&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome for standard icons (Socials, Play, Plus) -->
+    <!-- FontAwesome for standard icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -175,26 +175,6 @@
             line-height: 1.2;
         }
 
-        .spotify-save {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .spotify-save a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: transform 0.2s ease;
-        }
-        
-        .spotify-save a:hover {
-            transform: scale(1.05);
-        }
-
         .overlay-bottom {
             display: flex;
             align-items: flex-end;
@@ -206,19 +186,6 @@
             font-size: 0.85rem;
             flex: 1;
             margin: 0;
-            padding-right: 15px;
-        }
-
-        .play-btn {
-            color: var(--footer-green);
-            font-size: 3.5rem;
-            line-height: 1;
-            transition: transform 0.2s ease, color 0.2s ease;
-        }
-        
-        .play-btn:hover {
-            transform: scale(1.05);
-            color: var(--text-light);
         }
 
         /* Carousel Navigation Arrows */
@@ -563,13 +530,13 @@
     <main>
         <!-- Carousel Section -->
         <section class="carousel-container animate-on-scroll" id="dynamic-carousel">
-    <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
-    <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
-    
-    <div id="carousel-slides-container">
-        <!-- Slides will be injected here by JS -->
-    </div>
-</section>
+            <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
+            <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
+            
+            <div id="carousel-slides-container">
+                <!-- Slides will be injected here by JS -->
+            </div>
+        </section>
 
         <!-- About Us Section -->
         <section class="section-container animate-on-scroll">
@@ -635,45 +602,7 @@
     <!-- Include the local archive.js data file -->
     <script src="archive.js"></script>
 
-    <!-- JavaScript for Animations, Carousel, and Local Archive Data -->
-    <script>
-        // Carousel Logic
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const totalSlides = slides.length;
-        let slideInterval;
-
-        function showSlide(index) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            if (index >= totalSlides) {
-                currentSlide = 0;
-            } else if (index < 0) {
-                currentSlide = totalSlides - 1;
-            } else {
-                currentSlide = index;
-            }
-            slides[currentSlide].classList.add('active');
-        }
-
-        function moveSlide(step) {
-            showSlide(currentSlide + step);
-            resetInterval();
-        }
-
-        function startInterval() {
-            slideInterval = setInterval(() => {
-                showSlide(currentSlide + 1);
-            }, 5000); 
-        }
-
-        function resetInterval() {
-            clearInterval(slideInterval);
-            startInterval();
-        }
-
-        startInterval();
-
-        <!-- JavaScript for Animations, Local Archive Data, and Dynamic Carousel -->
+    <!-- JavaScript for Animations, Local Archive Data, and Dynamic Carousel -->
     <script>
         // Scroll Animation Logic
         const observerOptions = {
