@@ -55,7 +55,22 @@
             border-bottom: 2px solid var(--accent-line);
         }
 
-        .logo-container img { max-width: 750px; width: 95%; height: auto; margin-bottom: 1rem; }
+        .logo-container img { 
+            max-width: 750px; 
+            width: 95%; 
+            height: auto; 
+            margin-bottom: 1rem; 
+        }
+
+        /* Navigation Layout */
+        .main-nav {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 40px;
+        }
 
         .nav-links {
             display: flex;
@@ -64,6 +79,8 @@
             gap: 2.5rem;
             list-style: none;
             flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-links a {
@@ -77,6 +94,14 @@
 
         .nav-links a:hover, .nav-links a.active { color: #d1dfc1; transform: scale(1.05); }
 
+        /* Cart Button Pinned to the Right Edge */
+        .header-cart {
+            position: absolute;
+            right: 3rem; 
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
         #cart-toggle {
             color: var(--primary-green);
             background: var(--footer-green);
@@ -85,8 +110,24 @@
             font-family: var(--font-body);
             font-weight: 600;
             transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
         #cart-toggle:hover { background: var(--text-light); color: var(--primary-green); transform: scale(1.05); }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1050px) {
+            .header-cart {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+                margin-top: 1.5rem;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+        }
 
         /* Floating Join */
         .floating-join {
@@ -235,7 +276,10 @@
     <script type="text/javascript">
        (function(){ emailjs.init({ publicKey: "qI6ltlwzFXECV29P8", }); })();
     </script>
-<!-- Header -->
+</head>
+<body>
+
+    <!-- Header -->
     <header id="main-header">
         <div class="logo-container">
             <a href="index.html">
@@ -243,7 +287,6 @@
             </a>
         </div>
         <nav class="main-nav">
-            <!-- Main Links (Perfectly Centered) -->
             <ul class="nav-links">
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="stories.html">STORIES</a></li>
@@ -252,14 +295,11 @@
                 <li><a href="podcast.html">PODCAST</a></li>
                 <li><a href="contact.html">CONTACT US</a></li>
             </ul>
-
-            <!-- Cart Button (Pinned to the Right) -->
             <div class="header-cart">
                 <a href="#" id="cart-toggle">CART (0)</a>
             </div>
         </nav>
     </header>
-
 
     <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
         JOIN<br>US
