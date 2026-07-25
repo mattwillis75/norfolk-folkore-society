@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News | The Norfolk Folklore Society</title>
+    <meta name="description" content="Read the latest news, folklore research, and updates from The Norfolk Folklore Society.">
+    
+    <!-- Google Fonts: Corben Regular & Sora Light -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corben&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for standard icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS Variables for Colors and Fonts (From Norfolk Folklore Society) */
+        :root {
+            --primary-green: #375023;
+            --secondary-green: #4b6b33;
+            --footer-green: #a7b799;
+            --accent-line: #889b77;
+            --text-light: #fdfdfd;
+            --text-dark: #333333;
+            --font-headings: 'Corben', serif;
+            --font-body: 'Sora', sans-serif;
+        }
+
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 300;
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .nav-links a, .btn {
+            font-family: var(--font-headings);
+            font-weight: 400;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-green);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-line);
+        }
+
+        .logo-container img {
+            max-width: 750px; 
+            width: 95%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #d1dfc1;
+            transform: scale(1.05);
+        }
+
+        /* Floating 'Join Us' Roundel */
+        .floating-join {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 90px;
+            height: 90px;
+            background-color: var(--secondary-green);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-family: var(--font-headings);
+            font-size: 1.1rem;
+            z-index: 1001;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            line-height: 1.1;
+        }
+
+        .floating-join img {
+            width: 30px;
+            margin-top: 5px;
+        }
+
+        .floating-join:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Main Content Sections */
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 3rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .section-title h2 {
+            line-height: 1; 
+            margin: 0;
+        }
+
+        .section-title img {
+            height: 2rem;
+            width: auto;
+            position: relative;
+            top: 6px; 
+        }
+
+        /* --- NEWS LAYOUT (Adapted from Journal snippet) --- */
+        .news-container { 
+            display: grid; 
+            grid-template-columns: 280px 1fr; 
+            gap: 4rem; 
+            align-items: start; 
+            text-align: left;
+        }
+        
+        /* Sticky Sidebar */
+        .news-sidebar {
+            position: sticky;
+            top: 180px;
+            background: var(--secondary-green);
+            border: 1px solid var(--accent-line);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .news-sidebar h3 { 
+            margin-top: 0; 
+            margin-bottom: 1.5rem; 
+            font-size: 1.5rem; 
+            border-bottom: 1px solid var(--accent-line); 
+            padding-bottom: 0.5rem; 
+        }
+        
+        .sidebar-group { margin-bottom: 2rem; }
+        .sidebar-group label { 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-size: 0.85rem; 
+            color: #d1dfc1; 
+        }
+        
+        .news-sidebar input, .news-sidebar select {
+            width: 100%;
+            padding: 0.8rem;
+            background: #fdfdfd;
+            color: var(--text-dark);
+            border: 1px solid var(--accent-line);
+            border-radius: 3px;
+            font-family: var(--font-body);
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        
+        .news-sidebar input:focus, .news-sidebar select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        /* News Feed & Image Styles */
+        .news-feed { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4rem; 
+        }
+        
+        .news-entry {
+            background: transparent;
+            padding: 0 0 4rem 0; 
+            border-bottom: 1px solid var(--accent-line); 
+        }
+
+        .news-entry:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        /* Shared base styles for single image and carousel images */
+        .entry-image, .carousel-image { 
+            width: 100%; 
+            aspect-ratio: 4 / 3; 
+            object-fit: cover; 
+            background: var(--secondary-green);
+            border-radius: 8px;
+        }
+        .entry-image { display: block; }
+        
+        /* Carousel Specific Styles */
+        .carousel-container { 
+            position: relative; 
+            width: 100%; 
+            aspect-ratio: 4 / 3; 
+            overflow: hidden; 
+            display: block; 
+            border-radius: 8px;
+        }
+        .carousel-image { display: none; position: absolute; top: 0; left: 0; height: 100%; }
+        .carousel-image.active { display: block; }
+        .carousel-btn { 
+            position: absolute; top: 50%; transform: translateY(-50%); 
+            background: rgba(55, 80, 35, 0.85); color: white; border: none; 
+            padding: 10px 14px; cursor: pointer; font-size: 1.2rem; 
+            z-index: 10; transition: background 0.3s, color 0.3s;
+            border-radius: 3px;
+        }
+        .carousel-btn:hover { background: var(--secondary-green); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+        
+        .entry-content { padding: 1.5rem 0 0 0; }
+
+        .entry-date { 
+            color: var(--footer-green); 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-size: 0.9rem; 
+            margin-bottom: 0.5rem; 
+            display: block; 
+        }
+        .entry-title { 
+            font-size: 2.2rem; 
+            margin: 0 0 1.5rem 0; 
+            line-height: 1.2; 
+        }
+        
+        .entry-text p { 
+            font-size: 1.1rem; 
+            line-height: 1.8; 
+            margin-bottom: 1.5rem; 
+            text-align: left; 
+        }
+        
+        .entry-keywords { 
+            margin-top: 1.5rem; 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 0.5rem; 
+            align-items: center; 
+        }
+        
+        .keyword-tag { 
+            color: var(--footer-green); 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            display: flex; 
+            align-items: center; 
+        }
+
+        .keyword-tag:not(:last-child)::after {
+            content: '/';
+            color: var(--text-light);
+            margin-left: 0.5rem;
+            font-weight: bold;
+        }
+
+        .no-results { 
+            text-align: center; 
+            padding: 4rem 0; 
+            color: var(--footer-green); 
+            font-style: italic; 
+            font-size: 1.2rem; 
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--footer-green);
+            color: var(--primary-green);
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .social-icons a {
+            background-color: white;
+            color: var(--footer-green);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-center {
+            text-align: center;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem; 
+        }
+
+        .footer-center h2 {
+            font-size: 2.2rem;
+            margin: 0; 
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .footer-center p {
+            font-size: 1.2rem;
+            margin: 0 0 0.5rem 0; 
+        }
+
+        .btn-signup {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-signup:hover {
+            transform: scale(1.05);
+            background-color: #2b3d1b;
+        }
+
+        .footer-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-placeholder-circle {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+        }
+
+        /* Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-in-left.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-in-right.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .news-container { grid-template-columns: 1fr; gap: 2rem; } 
+            .news-sidebar { position: static; margin-bottom: 2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-left { justify-content: center; }
+            .footer-right { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society" loading="lazy">
+            </a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="stories.html">STORIES</a></li>
+                <li><a href="map.html">MAP</a></li>
+                <li><a href="shop.html">SHOP</a></li>
+                <li><a href="podcast.html">PODCAST</a></li>
+                <li><a href="news.html" class="active">NEWS</a></li>
+                <li><a href="contact.html">CONTACT US</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Floating Join Us Roundel -->
+    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
+        JOIN<br>US
+        <img src="images/tailpiece.svg" alt="decoration" loading="lazy">
+    </a>
+
+    <main>
+        <section class="section-container animate-on-scroll">
+            <div class="section-title">
+                <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
+                <h2>NEWS & UPDATES</h2>
+                <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
+            </div>
+
+            <div class="news-container">
+                <aside class="news-sidebar">
+                    <h3>Explore</h3>
+                    
+                    <div class="sidebar-group">
+                        <label for="search-input">Search Updates</label>
+                        <input type="text" id="search-input" placeholder="Search by word or keyword...">
+                    </div>
+                    
+                    <div class="sidebar-group">
+                        <label for="year-select">Filter by Year</label>
+                        <select id="year-select">
+                            <option value="all">All Years</option>
+                        </select>
+                    </div>
+                </aside>
+
+                <section class="news-feed" id="news-feed">
+                    <p class="loading-message" style="text-align:center; color:#d1dfc1;">Summoning the latest news...</p>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="animate-on-scroll">
+        <div class="footer-content">
+            <div class="footer-left social-icons">
+                <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://spotify.com" target="_blank" aria-label="Spotify"><i class="fa-brands fa-spotify"></i></a>
+            </div>
+
+            <div class="footer-center">
+                <h2>JOIN US</h2>
+                <p>Sign up to our Substack newsletter</p>
+                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-placeholder-circle"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Animations, Data Fetching, and Feed Carousel -->
+    <script>
+        // Scroll Animation Logic
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Global logic for Carousel Navigation within entries
+        window.moveSlide = function(carouselIndex, direction) {
+            const container = document.getElementById(`carousel-${carouselIndex}`);
+            if (!container) return;
+            const slides = container.querySelectorAll('.carousel-image');
+            if (slides.length === 0) return;
+
+            let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+            slides[currentIndex].classList.remove('active');
+
+            let nextIndex = currentIndex + direction;
+            if (nextIndex < 0) nextIndex = slides.length - 1;
+            if (nextIndex >= slides.length) nextIndex = 0;
+
+            slides[nextIndex].classList.add('active');
+        };
+
+        // Fetching & Rendering Logic adapted from The Journal
+        document.addEventListener("DOMContentLoaded", async () => {
+            const feedContainer = document.getElementById('news-feed');
+            const searchInput = document.getElementById('search-input');
+            const yearSelect = document.getElementById('year-select');
+            
+            let allEntries = [];
+            let uniqueYears = new Set();
+            let currentIndex = 1;
+
+            // --- 1. SEQUENTIAL FETCH LOOP ---
+            while (true) {
+                try {
+                    // Looks for entry-1.txt, entry-2.txt, etc. in the same directory
+                    const response = await fetch(`entry-${currentIndex}.txt`, { cache: 'no-store' });
+                    
+                    if (!response.ok) {
+                        break; 
+                    }
+                    
+                    const text = await response.text();
+                    const lines = text.split('\n');
+                    let entry = { textHtml: '', keywords: [], images: [] };
+                    let isParsingText = false;
+
+                    lines.forEach(line => {
+                        if (!isParsingText) {
+                            const sepIndex = line.indexOf(':');
+                            if (sepIndex > -1) {
+                                const key = line.slice(0, sepIndex).trim().toLowerCase();
+                                const value = line.slice(sepIndex + 1).trim();
+                                
+                                if (key === 'date') {
+                                    entry.date = value;
+                                    const year = value.split('-')[0];
+                                    if(year) uniqueYears.add(year);
+                                }
+                                else if (key === 'title') entry.title = value;
+                                else if (key === 'image') entry.images = value.split(',').map(i => i.trim());
+                                else if (key === 'keywords') entry.keywords = value.split(',').map(k => k.trim());
+                                else if (key === 'text') {
+                                    isParsingText = true;
+                                    const firstLineText = value; 
+                                    if(firstLineText) entry.textHtml += `<p>${firstLineText}</p>`;
+                                }
+                            }
+                        } else {
+                            if (line.trim() === '') {
+                                entry.textHtml += `</p><p>`;
+                            } else {
+                                entry.textHtml += line + ' ';
+                            }
+                        }
+                    });
+
+                    entry.textHtml = entry.textHtml.replace(/<p><\/p>/g, '');
+                    if (entry.title) allEntries.push(entry);
+                    currentIndex++;
+
+                } catch (error) {
+                    console.error("Finished loading entries or error occurred.");
+                    break;
+                }
+            }
+
+            // --- 2. SORT AND INITIALIZE UI ---
+            if (allEntries.length === 0) {
+                feedContainer.innerHTML = '<div class="no-results">No news updates found. Make sure "entry-1.txt" is uploaded to the server.</div>';
+            } else {
+                allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                Array.from(uniqueYears).sort().reverse().forEach(year => {
+                    yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
+                });
+
+                renderEntries(allEntries);
+            }
+
+            // --- 3. RENDER FUNCTION ---
+            function renderEntries(entriesToRender) {
+                feedContainer.innerHTML = '';
+                
+                if (entriesToRender.length === 0) {
+                    feedContainer.innerHTML = '<div class="no-results">No updates match your search criteria.</div>';
+                    return;
+                }
+
+                entriesToRender.forEach((entry, index) => {
+                    const dateObj = new Date(entry.date);
+                    const formattedDate = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                    // Image / Carousel Logic
+                    let imageHtml = '';
+                    if (entry.images && entry.images.length > 0 && entry.images[0] !== "") {
+                        if (entry.images.length === 1) {
+                            imageHtml = `<img src="${entry.images[0]}" alt="${entry.title}" class="entry-image">`;
+                        } else {
+                            let slides = entry.images.map((img, i) => 
+                                `<img src="${img}" alt="${entry.title} - Image ${i+1}" class="carousel-image ${i === 0 ? 'active' : ''}">`
+                            ).join('');
+
+                            imageHtml = `
+                                <div class="carousel-container" id="carousel-${index}">
+                                    ${slides}
+                                    <button class="carousel-btn prev" onclick="moveSlide(${index}, -1)">&#10094;</button>
+                                    <button class="carousel-btn next" onclick="moveSlide(${index}, 1)">&#10095;</button>
+                                </div>
+                            `;
+                        }
+                    }
+                    
+                    let keywordsHtml = '';
+                    if (entry.keywords.length > 0 && entry.keywords[0] !== "") {
+                        keywordsHtml = `<div class="entry-keywords">` + entry.keywords.map(k => `<span class="keyword-tag">${k}</span>`).join('') + `</div>`;
+                    }
+
+                    const article = document.createElement('article');
+                    article.className = "news-entry animate-on-scroll";
+                    article.innerHTML = `
+                        ${imageHtml}
+                        <div class="entry-content">
+                            <span class="entry-date">${formattedDate}</span>
+                            <h2 class="entry-title">${entry.title}</h2>
+                            <div class="entry-text">${entry.textHtml}</div>
+                            ${keywordsHtml}
+                        </div>
+                    `;
+                    
+                    feedContainer.appendChild(article);
+                    
+                    // Attach intersection observer to newly created entry
+                    setTimeout(() => observer.observe(article), 50); 
+                });
+            }
+
+            // --- 4. SEARCH & FILTER LOGIC ---
+            function filterNews() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedYear = yearSelect.value;
+
+                const filtered = allEntries.filter(entry => {
+                    const matchesYear = selectedYear === 'all' || entry.date.startsWith(selectedYear);
+                    const matchesSearch = searchTerm === '' || 
+                        entry.title.toLowerCase().includes(searchTerm) || 
+                        entry.textHtml.toLowerCase().includes(searchTerm) ||
+                        entry.keywords.some(k => k.toLowerCase().includes(searchTerm));
+
+                    return matchesYear && matchesSearch;
+                });
+
+                renderEntries(filtered);
+            }
+
+            searchInput.addEventListener('keyup', filterNews);
+            yearSelect.addEventListener('change', filterNews);
+        });
+    </script>
+</body>
+</html>
