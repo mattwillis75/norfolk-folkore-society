@@ -2,7 +2,7 @@ Slide: 1
 Format: EVENT
 Heading: Black Shuck Festival Weekend
 Description: This weekend the Norfolk Folklore Society will be at the Fisher Theatre in Bungay hosting a series of folklore related talks.
-Image: images/carousel-1.jpg.jpg
+Image: images/carousel-6.jpg.jpg
 ---
 Slide: 2
 Format: PODCAST
