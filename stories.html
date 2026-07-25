@@ -507,10 +507,8 @@ const apiUrl = proxyBase + encodeURIComponent(substackUrl);
                         if (!response.ok) throw new Error("Network response was not ok");
                         return response.json();
                     })
-                    .then(proxyData => {
-                        // Extract the JSON data from the proxy's 'contents' wrapper
-                        const data = JSON.parse(proxyData.contents);
-                        
+                    .then(data => {
+                        // The Cloudflare worker passes the clean array directly! No unpacking needed!
                         if (Array.isArray(data) && data.length > 0) {
                             renderStories(data);
                             renderPaginationControls(page, data.length);
