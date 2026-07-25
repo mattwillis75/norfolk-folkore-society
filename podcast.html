@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* CSS Variables for Colors and Fonts */
+        /* CSS Variables */
         :root {
             --primary-green: #375023;
             --secondary-green: #4b6b33;
@@ -87,7 +87,7 @@
             transform: scale(1.05);
         }
 
-        /* Floating 'Join Us' Roundel */
+        /* Floating Join Us */
         .floating-join {
             position: fixed;
             top: 50%;
@@ -122,7 +122,7 @@
             transform: translateY(-50%) scale(1.1);
         }
 
-        /* Main Content Sections */
+        /* Main Layout */
         .section-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -159,42 +159,90 @@
             color: #e0e0e0;
         }
 
-        /* Spotify Embed Container */
-        .spotify-wrapper {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border: 1px solid var(--accent-line);
-            max-width: 800px;
-            margin: 0 auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        /* Podcast Grid (Matches Stories Grid) */
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
         }
 
-        /* Ensures the iframe is responsive */
-        .spotify-wrapper iframe {
+        .story-card {
+            background-color: white;
+            color: var(--text-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); 
+        }
+
+        .story-card img.hero-img {
             width: 100%;
-            display: block;
+            height: 220px;
+            object-fit: cover;
         }
 
-        /* Button */
-        .btn-signup {
-            background-color: var(--primary-green);
-            color: var(--text-light);
-            padding: 0.75rem 2rem;
+        .story-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .story-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-green);
+        }
+        
+        .story-content .author-date {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 1rem;
+            font-family: var(--font-body);
+        }
+
+        .story-content p.excerpt {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        /* Listen Button */
+        .btn-listen {
+            background-color: #1DB954; /* Spotify Green */
+            color: white;
+            padding: 0.6rem 1.2rem;
             border-radius: 25px;
             text-decoration: none;
-            font-size: 1.1rem;
-            display: inline-block;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            white-space: nowrap;
-            border: 2px solid var(--accent-line);
-            cursor: pointer;
-            font-family: var(--font-headings);
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+            font-family: var(--font-body);
+            font-weight: 600;
+            align-self: flex-start;
         }
 
-        .btn-signup:hover {
-            transform: scale(1.05);
-            background-color: #2b3d1b;
+        .btn-listen:hover {
+            background-color: #1aa34a;
+        }
+
+        .loading-message {
+            grid-column: 1 / -1;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            padding: 2rem;
         }
 
         /* Footer */
@@ -257,6 +305,24 @@
         .footer-center p {
             font-size: 1.2rem;
             margin: 0 0 0.5rem 0; 
+        }
+
+        .btn-signup {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+            border: 2px solid var(--accent-line);
+        }
+
+        .btn-signup:hover {
+            transform: scale(1.05);
+            background-color: #2b3d1b;
         }
 
         .footer-right {
@@ -346,7 +412,7 @@
     </a>
 
     <main>
-        <!-- Podcast Embed Section -->
+        <!-- Podcast Archive Section -->
         <section class="section-container animate-on-scroll">
             <div class="section-title">
                 <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
@@ -354,11 +420,12 @@
                 <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
-            <p class="intro-text animate-on-scroll">Join us as we traverse the marshes, woods, and ancient ruins of the county. Listen to the latest episodes directly below, or follow us on Spotify to never miss a tale.</p>
+            <p class="intro-text animate-on-scroll">Join us as we traverse the marshes, woods, and ancient ruins of the county. Listen to our archived episodes below.</p>
             
-            <div class="spotify-wrapper animate-on-scroll">
-    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/show/2akJFpxkl1x8AVtf2vHrMW?utm_source=generator&si=f6406bc8bf934dd7" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-</div>
+            <!-- Where the JavaScript injects the cards -->
+            <div class="stories-grid" id="podcast-grid">
+                <p class="loading-message">Tuning into the archive...</p>
+            </div>
         </section>
     </main>
 
@@ -383,8 +450,12 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Animations -->
+    <!-- Include the local podcast.js data file -->
+    <script src="podcast.js"></script>
+
+    <!-- JavaScript for Animations & Grid Generation -->
     <script>
+        // Scroll Animations
         const observerOptions = {
             root: null,
             rootMargin: '0px',
@@ -402,6 +473,47 @@
 
         document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
             observer.observe(element);
+        });
+
+        // Load Podcasts from podcast.js
+        document.addEventListener("DOMContentLoaded", function() {
+            const podcastGrid = document.getElementById('podcast-grid');
+            
+            // Check if the podcastArchive array loaded successfully
+            if (typeof podcastArchive !== 'undefined' && podcastArchive.length > 0) {
+                podcastGrid.innerHTML = ''; // Clear loading message
+                
+                podcastArchive.forEach(episode => {
+                    // Format the date nicely
+                    const dateObj = new Date(episode.publish_date);
+                    const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                    });
+
+                    // Build the card
+                    const card = document.createElement('div');
+                    card.className = "story-card animate-on-scroll";
+                    card.innerHTML = `
+                        <img src="${episode.image}" alt="${episode.title}" class="hero-img" loading="lazy">
+                        <div class="story-content">
+                            <h3>${episode.title}</h3>
+                            <p class="author-date">${formattedDate}</p>
+                            <p class="excerpt">${episode.description}</p>
+                            <a href="${episode.spotify_link}" target="_blank" class="btn-listen">
+                                <i class="fa-brands fa-spotify"></i> Listen on Spotify
+                            </a>
+                        </div>
+                    `;
+                    
+                    podcastGrid.appendChild(card);
+                    // Add slight delay for the scroll animation observer to catch it
+                    setTimeout(() => observer.observe(card), 50); 
+                });
+            } else {
+                podcastGrid.innerHTML = '<p class="loading-message" style="color: #ffcccc;">Cannot find the archive data. Make sure <strong>podcast.js</strong> is saved in the exact same folder as this page.</p>';
+            }
         });
     </script>
 </body>
