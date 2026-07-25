@@ -5,7 +5,7 @@ Postal Class: Standard
 Item Cost: £2.00
 ---
 Title: Siofra and Stacia Print
-Main Image: images/siofra-and-stacia-print-1.jpg.jpg
+Main Image: images/siofra-and-stacia-print.jpg.jpg
 Sections: Print
 Postal Class: B
 Item Cost: £12.00
