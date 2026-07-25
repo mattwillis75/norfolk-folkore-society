@@ -1,135 +1,540 @@
-<!-- JavaScript -->
-<script>
-    // Set up the Scroll Observer for animations
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe initial static elements
-    document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
-        observer.observe(element);
-    });
-
-    // Local JSON Fetch Logic with Pagination
-    const featuredGrid = document.getElementById('featured-stories-grid');
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    const initialLoading = document.getElementById('initial-loading');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stories | The Norfolk Folklore Society</title>
+    <meta name="description" content="Read the latest myths, legends, and history from The Norfolk Folklore Society archive.">
     
-    let currentOffset = 0;
-    const storiesPerLoad = 9;
-    let allStories = []; // We will store the full archive here once loaded
+    <!-- Google Fonts: Corben Regular & Sora Light -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corben&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
     
-    function renderStories() {
-        // Slice out the next 9 stories from our local array
-        const storiesToRender = allStories.slice(currentOffset, currentOffset + storiesPerLoad);
-        
-        storiesToRender.forEach(item => {
-            const dateObj = new Date(item.post_date);
-            const formattedDate = dateObj.toLocaleDateString('en-US', { 
-                month: 'short', day: 'numeric', year: 'numeric' 
-            });
+    <!-- FontAwesome for standard icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-            // Fallback image in case a specific post lacks a cover image
-            const imageUrl = item.cover_image || 'images/norfolk-folklore-society-logo-main.png'; 
-            
-            let textContent = item.description || "";
-            const excerpt = textContent.length > 120 
-                ? textContent.substring(0, 120).trim() + "..." 
-                : textContent;
-
-            let author = "Ada Nemesis";
-            if (item.authors && item.authors.length > 0) {
-                author = item.authors[0].name;
-            }
-
-            // Build the card HTML
-            const card = document.createElement('a');
-            card.href = item.canonical_url;
-            card.className = "story-card animate-on-scroll";
-            card.target = "_blank";
-            card.innerHTML = `
-                <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
-                <div class="story-content">
-                    <h3>${item.title}</h3>
-                    <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
-                    <p class="excerpt">${excerpt}</p>
-                </div>
-            `;
-            
-            // Append card to grid and observe it so it animates in properly
-            featuredGrid.appendChild(card);
-            // Small delay so the browser registers it before animating
-            setTimeout(() => observer.observe(card), 50); 
-        });
-
-        currentOffset += storiesPerLoad;
-
-        // Hide the button if we've reached the end of the archive
-        if (currentOffset >= allStories.length) {
-            loadMoreBtn.style.display = 'none';
-        } else {
-            loadMoreBtn.innerText = 'Load More Stories';
-            loadMoreBtn.disabled = false;
-            loadMoreBtn.style.opacity = '1';
+    <style>
+        /* CSS Variables for Colors and Fonts */
+        :root {
+            --primary-green: #375023;
+            --secondary-green: #4b6b33;
+            --footer-green: #a7b799;
+            --accent-line: #889b77;
+            --text-light: #fdfdfd;
+            --text-dark: #333333;
+            --font-headings: 'Corben', serif;
+            --font-body: 'Sora', sans-serif;
         }
-    }
 
-    function initArchive() {
-        // Change button text to indicate loading state
-        const originalBtnText = loadMoreBtn.innerText;
-        loadMoreBtn.innerText = 'Summoning...';
-        loadMoreBtn.disabled = true;
-        loadMoreBtn.style.opacity = '0.7';
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        // Fetch the local JSON file
-        fetch('archive.json')
-            .then(response => {
-                if (!response.ok) throw new Error("Could not find archive.json");
-                return response.json();
-            })
-            .then(data => {
-                if (Array.isArray(data) && data.length > 0) {
-                    allStories = data; // Store the whole archive in memory
-                    
-                    if (initialLoading) {
-                        initialLoading.remove(); 
-                        loadMoreBtn.style.display = 'inline-block';
-                    }
-                    
-                    renderStories(); // Render the first batch
-                } else {
-                    featuredGrid.innerHTML = '<p class="loading-message">The archive is empty.</p>';
-                    loadMoreBtn.style.display = 'none';
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching local JSON:', error);
-                featuredGrid.innerHTML = '<p class="loading-message">Cannot find the archive.json file. Make sure it is saved in the same folder as this page.</p>';
-                loadMoreBtn.style.display = 'none';
-            });
-    }
+        body {
+            font-family: var(--font-body);
+            font-weight: 300;
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
 
-    // Load the JSON automatically when the page loads
-    document.addEventListener("DOMContentLoaded", initArchive);
-    
-    // Render the next batch when the button is clicked
-    loadMoreBtn.addEventListener('click', () => {
-        loadMoreBtn.innerText = 'Summoning...';
-        loadMoreBtn.disabled = true;
-        loadMoreBtn.style.opacity = '0.7';
+        h1, h2, h3, h4, .nav-links a, .btn {
+            font-family: var(--font-headings);
+            font-weight: 400;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-green);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-line);
+        }
+
+        .logo-container img {
+            max-width: 750px; 
+            width: 95%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #d1dfc1;
+            transform: scale(1.05);
+        }
+
+        /* Floating 'Join Us' Roundel */
+        .floating-join {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 90px;
+            height: 90px;
+            background-color: var(--secondary-green);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-family: var(--font-headings);
+            font-size: 1.1rem;
+            z-index: 1001;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            line-height: 1.1;
+        }
+
+        .floating-join img {
+            width: 30px;
+            margin-top: 5px;
+        }
+
+        .floating-join:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Main Content Sections */
+        .section-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 3rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .section-title h2 {
+            line-height: 1; 
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .section-title img {
+            height: 2rem;
+            width: auto;
+            position: relative;
+            top: 6px; 
+        }
+
+        /* Stories Grid */
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .story-card {
+            background-color: white;
+            color: var(--text-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); 
+        }
+
+        .story-card img.hero-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .story-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .story-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-green);
+        }
         
-        // Slight timeout for visual feedback
-        setTimeout(renderStories, 300);
-    });
-</script>
+        .story-content .author-date {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 1rem;
+            font-family: var(--font-body);
+        }
+
+        .story-content .author-date strong {
+            color: var(--primary-green);
+        }
+
+        .story-content p.excerpt {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .loading-message {
+            grid-column: 1 / -1;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            padding: 2rem;
+        }
+
+        /* Button */
+        .btn-signup {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+            border: 2px solid var(--accent-line);
+            cursor: pointer;
+            font-family: var(--font-headings);
+        }
+
+        .btn-signup:hover {
+            transform: scale(1.05);
+            background-color: #2b3d1b;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--footer-green);
+            color: var(--primary-green);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .social-icons a {
+            background-color: white;
+            color: var(--footer-green);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-center {
+            text-align: center;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem; 
+        }
+
+        .footer-center h2 {
+            font-size: 2.2rem;
+            margin: 0; 
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .footer-center p {
+            font-size: 1.2rem;
+            margin: 0 0 0.5rem 0; 
+        }
+
+        .footer-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-placeholder-circle {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+        }
+
+        /* Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-in-left.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-in-right.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-left {
+                justify-content: center;
+            }
+            .footer-right {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society" loading="lazy">
+            </a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="stories.html" class="active">STORIES</a></li>
+                <li><a href="map.html">MAP</a></li>
+                <li><a href="shop.html">SHOP</a></li>
+                <li><a href="podcast.html">PODCAST</a></li>
+                <li><a href="contact.html">CONTACT US</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Floating Join Us Roundel -->
+    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
+        JOIN<br>US
+        <img src="images/tailpiece.svg" alt="decoration" loading="lazy">
+    </a>
+
+    <main>
+        <!-- Featured Stories Section -->
+        <section class="section-container animate-on-scroll">
+            <div class="section-title">
+                <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
+                <h2>THE ARCHIVE</h2>
+                <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
+            </div>
+            
+            <div class="stories-grid" id="featured-stories-grid">
+                <p class="loading-message" id="initial-loading">Summoning stories from the archive...</p>
+                <!-- Cards will inject here via JavaScript -->
+            </div>
+
+            <!-- Load More Button -->
+            <div style="text-align: center; margin-top: 3rem;">
+                <button id="loadMoreBtn" class="btn-signup" style="display: none;">Load More Stories</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="animate-on-scroll">
+        <div class="footer-content">
+            <div class="footer-left social-icons">
+                <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://spotify.com" target="_blank" aria-label="Spotify"><i class="fa-brands fa-spotify"></i></a>
+            </div>
+
+            <div class="footer-center">
+                <h2>JOIN US</h2>
+                <p>Sign up to our Substack newsletter</p>
+                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-placeholder-circle"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load the data file directly to bypass local browser security -->
+    <script src="archive.js"></script>
+
+    <!-- Main JavaScript -->
+    <script>
+        // Set up the Scroll Observer for animations
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Local Data Logic with Pagination
+        const featuredGrid = document.getElementById('featured-stories-grid');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        const initialLoading = document.getElementById('initial-loading');
+        
+        let currentOffset = 0;
+        const storiesPerLoad = 9;
+        let allStories = []; 
+        
+        function renderStories() {
+            const storiesToRender = allStories.slice(currentOffset, currentOffset + storiesPerLoad);
+            
+            storiesToRender.forEach(item => {
+                const dateObj = new Date(item.post_date);
+                const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const imageUrl = item.cover_image || 'images/norfolk-folklore-society-logo-main.png'; 
+                
+                let textContent = item.description || "";
+                const excerpt = textContent.length > 120 ? textContent.substring(0, 120).trim() + "..." : textContent;
+
+                let author = "Ada Nemesis";
+                if (item.authors && item.authors.length > 0) {
+                    author = item.authors[0].name;
+                }
+
+                const card = document.createElement('a');
+                card.href = item.canonical_url;
+                card.className = "story-card animate-on-scroll";
+                card.target = "_blank";
+                card.innerHTML = `
+                    <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
+                    <div class="story-content">
+                        <h3>${item.title}</h3>
+                        <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
+                        <p class="excerpt">${excerpt}</p>
+                    </div>
+                `;
+                
+                featuredGrid.appendChild(card);
+                // Slight delay ensures the browser registers the element before animating
+                setTimeout(() => observer.observe(card), 50); 
+            });
+
+            currentOffset += storiesPerLoad;
+
+            // Hide the button if we've reached the end of the archive array
+            if (currentOffset >= allStories.length) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.innerText = 'Load More Stories';
+                loadMoreBtn.disabled = false;
+                loadMoreBtn.style.opacity = '1';
+            }
+        }
+
+        function initArchive() {
+            // Check if the localArchive variable from archive.js loaded successfully
+            if (typeof localArchive !== 'undefined' && localArchive.length > 0) {
+                allStories = localArchive; 
+                
+                if (initialLoading) {
+                    initialLoading.remove(); 
+                    loadMoreBtn.style.display = 'inline-block';
+                }
+                
+                renderStories(); 
+            } else {
+                if (initialLoading) {
+                    initialLoading.innerHTML = '<p class="loading-message" style="color: #ffcccc;">Cannot find the archive data. Make sure <strong>archive.js</strong> is saved in the exact same folder as this page.</p>';
+                }
+            }
+        }
+
+        // Run the initialization when the HTML is fully loaded
+        document.addEventListener("DOMContentLoaded", initArchive);
+        
+        // Handle "Load More" clicks
+        loadMoreBtn.addEventListener('click', () => {
+            loadMoreBtn.innerText = 'Summoning...';
+            loadMoreBtn.disabled = true;
+            loadMoreBtn.style.opacity = '0.7';
+            
+            // Add a slight delay for visual feedback
+            setTimeout(renderStories, 300);
+        });
+    </script>
+</body>
+</html>
