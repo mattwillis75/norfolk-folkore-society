@@ -1,8 +1,12 @@
 Title: Norfolk Folklore Society Badge Pack
 Main Image: ./images/postcard-1.jpg
-Images: 
 Sections: Badges, Postcards
-Item Cost: 2.00
 Postal Class: Standard
-Description: This pack includes two Norfolk Folklore Society badges, one featuring their logo and the other an old illustration of Black Shuck. Also included is a Norfolk Folklore Society postcard and glassine envelope.
+Item Cost: £2.00
+---
+Title: Siofra and Stacia Print
+Main Image: images/siofra-and-stacia-print-1.jpg.jpg
+Sections: Print
+Postal Class: B
+Item Cost: £12.00
 ---
