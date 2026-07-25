@@ -657,10 +657,13 @@
             observer.observe(element);
         });
 
-        // Loop to swap portraits every 15 seconds
+        // Loop to swap portraits every 15 seconds with directional states
         document.addEventListener("DOMContentLoaded", function() {
             const imgLeft = document.getElementById('portrait-left');
             const imgRight = document.getElementById('portrait-right');
+            
+            // Track Siofra's position
+            let isSiofraLeft = true;
 
             if (imgLeft && imgRight) {
                 setInterval(() => {
@@ -670,14 +673,24 @@
 
                     // Wait 1.5 seconds (to match CSS transition length) before swapping sources
                     setTimeout(() => {
-                        const tempSrc = imgLeft.src;
-                        const tempAlt = imgLeft.alt;
-
-                        imgLeft.src = imgRight.src;
-                        imgLeft.alt = imgRight.alt;
-
-                        imgRight.src = tempSrc;
-                        imgRight.alt = tempAlt;
+                        if (isSiofraLeft) {
+                            // Move Stacia to left, Siofra to right (using alternative image)
+                            imgLeft.src = 'images/Stacia portrait.png';
+                            imgLeft.alt = 'Stacia';
+                            
+                            imgRight.src = 'images/Siofra portrait right.png';
+                            imgRight.alt = 'Siofra';
+                        } else {
+                            // Move Siofra back to left (using original image), Stacia to right
+                            imgLeft.src = 'images/Siofra portrait.png';
+                            imgLeft.alt = 'Siofra';
+                            
+                            imgRight.src = 'images/Stacia portrait.png';
+                            imgRight.alt = 'Stacia';
+                        }
+                        
+                        // Toggle the state for the next cycle
+                        isSiofraLeft = !isSiofraLeft;
 
                         // Fade back in
                         imgLeft.style.opacity = '1';
