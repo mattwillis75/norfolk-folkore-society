@@ -262,7 +262,7 @@
             width: 100%;
             height: auto;
             z-index: 2; /* Sits on top */
-            pointer-events: none; /* Let clicks pass through if needed */
+            pointer-events: none;
         }
 
         .portrait-img {
@@ -272,8 +272,8 @@
             width: 100%;
             height: 100%;
             z-index: 1; /* Sits behind the frame */
-            transition: opacity 1.5s ease-in-out; /* Smooth fade effect */
-            opacity: 1; /* Default visibility */
+            transition: opacity 1.5s ease-in-out; 
+            opacity: 1; 
             object-fit: cover;
         }
 
@@ -451,11 +451,39 @@
             justify-content: flex-end;
         }
 
-        .footer-placeholder-circle {
-            width: 100px;
-            height: 100px;
-            background-color: var(--primary-green);
-            border-radius: 50%;
+        /* Shuck Footer Animation */
+        .shuck-container {
+            position: relative;
+            width: 120px; /* Slightly wider than the original 100px circle to allow for the glow */
+        }
+
+        .shuck-img {
+            display: block;
+            width: 100%;
+            height: auto;
+            z-index: 1;
+        }
+
+        .eyes-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.9));
+            }
+            100% {
+                filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.3));
+            }
         }
 
         /* -----------------------
@@ -625,9 +653,12 @@
                 <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
             </div>
 
-            <!-- Right Side: Dark Green Circle Placeholder -->
+            <!-- Right Side: Shuck and Glowing Eyes -->
             <div class="footer-right">
-                <div class="footer-placeholder-circle"></div>
+                <div class="shuck-container">
+                    <img src="images/Shuck.png" alt="Black Shuck" class="shuck-img" loading="lazy">
+                    <img src="images/Eyes.png" alt="Glowing Red Eyes" class="eyes-img" loading="lazy">
+                </div>
             </div>
         </div>
     </footer>
