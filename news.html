@@ -225,13 +225,15 @@
             padding-bottom: 0;
         }
 
-        /* Shared base styles for single image and carousel images */
-        .entry-image, .carousel-image { 
+        /* Shared base styles for image containers */
+        .entry-image, .carousel-container { 
             width: 100%; 
-            aspect-ratio: 4 / 3; 
-            object-fit: cover; 
+            max-width: 1032px; 
+            aspect-ratio: 4 / 3; /* Automatically equals 774px height at full width */
             background: var(--secondary-green);
             border-radius: 8px;
+            display: block;
+            margin: 0 auto; 
         }
         .entry-image { display: block; }
         
