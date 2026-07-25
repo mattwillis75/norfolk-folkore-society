@@ -493,11 +493,11 @@
                 const offset = (page - 1) * storiesPerPage;
                 
                 // Native Substack API URL using limits and offsets
-                const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerPage}&offset=${offset}`;
-                
-                // Add a timestamp cache buster so the proxy knows it is a brand new page request
-                const cacheBuster = Date.now();
-                const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(substackUrl + '&_cb=' + cacheBuster)}`;
+const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerPage}&offset=${offset}`;
+
+// Use your private Cloudflare Worker proxy! (Replace with your actual worker URL)
+const proxyBase = 'https://folklore-proxy.your-username.workers.dev/?url=';
+const apiUrl = proxyBase + encodeURIComponent(substackUrl);
 
                 feedContainer.innerHTML = '<p class="loading-message">Summoning stories from the archive...</p>';
                 paginationContainer.innerHTML = ''; 
