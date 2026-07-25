@@ -249,9 +249,32 @@
             margin-bottom: 0;
         }
 
-        .portrait {
+        /* Container for stacked frame and portrait */
+        .portrait-container {
+            position: relative;
             width: 220px;
+            flex-shrink: 0;
+        }
+
+        .portrait-frame {
+            position: relative;
+            display: block;
+            width: 100%;
             height: auto;
+            z-index: 2; /* Sits on top */
+            pointer-events: none; /* Let clicks pass through if needed */
+        }
+
+        .portrait-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Sits behind the frame */
+            transition: opacity 1.5s ease-in-out; /* Smooth fade effect */
+            opacity: 1; /* Default visibility */
+            object-fit: cover;
         }
 
         .description-text {
@@ -547,7 +570,12 @@
             </div>
             
             <div class="society-content">
-                <img src="images/siofra.png" alt="Siofra" class="portrait portrait-animate" loading="lazy">
+                
+                <!-- Left Stacked Portrait -->
+                <div class="portrait-container portrait-animate">
+                    <img src="images/Siofra portrait.png" alt="Siofra" class="portrait-img" id="portrait-left" loading="lazy">
+                    <img src="images/Frame left.png" alt="Decorative Left Frame" class="portrait-frame" loading="lazy">
+                </div>
                 
                 <div class="description-text">
                     <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
@@ -555,7 +583,12 @@
                     <img src="images/tailpiece.svg" alt="Tailpiece Graphic" class="tailpiece" loading="lazy">
                 </div>
 
-                <img src="images/stacia.png" alt="Stacia" class="portrait portrait-animate" loading="lazy">
+                <!-- Right Stacked Portrait -->
+                <div class="portrait-container portrait-animate">
+                    <img src="images/Stacia portrait.png" alt="Stacia" class="portrait-img" id="portrait-right" loading="lazy">
+                    <img src="images/Frame right.png" alt="Decorative Right Frame" class="portrait-frame" loading="lazy">
+                </div>
+                
             </div>
         </section>
 
@@ -622,6 +655,37 @@
 
         document.querySelectorAll('.animate-on-scroll, .portrait-animate, .slide-in-left, .slide-in-right').forEach(element => {
             observer.observe(element);
+        });
+
+        // Loop to swap portraits every 15 seconds
+        document.addEventListener("DOMContentLoaded", function() {
+            const imgLeft = document.getElementById('portrait-left');
+            const imgRight = document.getElementById('portrait-right');
+
+            if (imgLeft && imgRight) {
+                setInterval(() => {
+                    // Start fade out
+                    imgLeft.style.opacity = '0';
+                    imgRight.style.opacity = '0';
+
+                    // Wait 1.5 seconds (to match CSS transition length) before swapping sources
+                    setTimeout(() => {
+                        const tempSrc = imgLeft.src;
+                        const tempAlt = imgLeft.alt;
+
+                        imgLeft.src = imgRight.src;
+                        imgLeft.alt = imgRight.alt;
+
+                        imgRight.src = tempSrc;
+                        imgRight.alt = tempAlt;
+
+                        // Fade back in
+                        imgLeft.style.opacity = '1';
+                        imgRight.style.opacity = '1';
+                    }, 1500);
+
+                }, 15000); // Trigger every 15 seconds
+            }
         });
 
         // Load Featured Stories from archive.js (Latest 3)
