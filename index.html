@@ -673,6 +673,8 @@
 
         startInterval();
 
+        <!-- JavaScript for Animations, Local Archive Data, and Dynamic Carousel -->
+    <script>
         // Scroll Animation Logic
         const observerOptions = {
             root: null,
@@ -745,62 +747,105 @@
                 featuredGrid.innerHTML = '<p class="loading-message" style="color: #ffcccc;">Cannot find the archive data. Make sure <strong>archive.js</strong> is saved in the exact same folder as this page.</p>';
             }
         });
-    </script>
-    <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-        const container = document.getElementById('carousel-slides-container');
-        if(!container) return;
+        
+        // Dynamic Carousel Logic
+        document.addEventListener("DOMContentLoaded", async () => {
+            const container = document.getElementById('carousel-slides-container');
+            if(!container) return;
 
-        try {
-            const response = await fetch('carousel.txt', { cache: 'no-store' });
-            if (!response.ok) return;
-            
-            const text = await response.text();
-            const slidesRaw = text.split('---');
-            let slideIndex = 0;
-
-            slidesRaw.forEach(rawSlide => {
-                if(!rawSlide.trim()) return;
-                let slide = { format: "", heading: "", desc: "", image: "" };
+            try {
+                // Fetch the text file (bypassing cache)
+                const response = await fetch('carousel.txt', { cache: 'no-store' });
+                if (!response.ok) return;
                 
-                rawSlide.trim().split('\n').forEach(line => {
-                    const idx = line.indexOf(':');
-                    if(idx > -1) {
-                        const key = line.slice(0,idx).trim().toLowerCase();
-                        const val = line.slice(idx+1).trim();
-                        if(key === 'format') slide.format = val;
-                        if(key === 'heading') slide.heading = val;
-                        if(key === 'description') slide.desc = val;
-                        if(key === 'image') slide.image = val;
+                const text = await response.text();
+                const slidesRaw = text.split('---');
+                let slideIndex = 0;
+                
+                // Generate a timestamp to force the browser to load fresh images
+                const cacheBuster = new Date().getTime();
+
+                // 1. Build the HTML slides
+                slidesRaw.forEach(rawSlide => {
+                    if(!rawSlide.trim()) return;
+                    let slide = { format: "", heading: "", desc: "", image: "" };
+                    
+                    rawSlide.trim().split('\n').forEach(line => {
+                        const idx = line.indexOf(':');
+                        if(idx > -1) {
+                            const key = line.slice(0,idx).trim().toLowerCase();
+                            const val = line.slice(idx+1).trim();
+                            if(key === 'format') slide.format = val;
+                            if(key === 'heading') slide.heading = val;
+                            if(key === 'description') slide.desc = val;
+                            if(key === 'image') slide.image = val;
+                        }
+                    });
+
+                    if (slide.heading) {
+                        const isActive = slideIndex === 0 ? "active" : "";
+                        // Append cachebuster to image URL
+                        const imageUrlWithBuster = `${slide.image}?v=${cacheBuster}`;
+                        
+                        const html = `
+                        <div class="carousel-slide slide-${slideIndex + 1} ${isActive}" style="background-image: url('${imageUrlWithBuster}');">
+                            <div class="carousel-overlay">
+                                <h2>${slide.format}</h2>
+                                <h3>${slide.heading}</h3>
+                                <div class="overlay-bottom">
+                                    <p>${slide.desc}</p>
+                                </div>
+                            </div>
+                        </div>`;
+                        container.innerHTML += html;
+                        slideIndex++;
                     }
                 });
 
-                if (slide.heading) {
-                    const isActive = slideIndex === 0 ? "active" : "";
-                    const html = `
-                    <div class="carousel-slide slide-${slideIndex + 1} ${isActive}" style="background-image: url('${slide.image}');">
-                        <div class="carousel-overlay">
-                            <h2>${slide.format}</h2>
-                            <h3>${slide.heading}</h3>
-                            <div class="overlay-bottom">
-                                <p>${slide.desc}</p>
-                            </div>
-                        </div>
-                    </div>`;
-                    container.innerHTML += html;
-                    slideIndex++;
+                // 2. Initialize Carousel Mechanics NOW that slides exist
+                let currentSlide = 0;
+                const slides = document.querySelectorAll('.carousel-slide');
+                const totalSlides = slides.length;
+                let slideInterval;
+
+                // Make moveSlide available globally for the HTML arrow buttons
+                window.moveSlide = function(step) {
+                    showSlide(currentSlide + step);
+                    resetInterval();
+                };
+
+                function showSlide(index) {
+                    slides.forEach(s => s.classList.remove('active'));
+                    if (index >= totalSlides) {
+                        currentSlide = 0;
+                    } else if (index < 0) {
+                        currentSlide = totalSlides - 1;
+                    } else {
+                        currentSlide = index;
+                    }
+                    slides[currentSlide].classList.add('active');
                 }
-            });
 
-            // Re-bind the slides node list for your existing moveSlide() function
-            window.slides = document.querySelectorAll('.carousel-slide');
-            window.totalSlides = window.slides.length;
-            window.currentSlide = 0;
+                function startInterval() {
+                    slideInterval = setInterval(() => {
+                        showSlide(currentSlide + 1);
+                    }, 5000); 
+                }
 
-        } catch (error) {
-            console.error("Error loading carousel data.", error);
-        }
-    });
-</script>
+                function resetInterval() {
+                    clearInterval(slideInterval);
+                    startInterval();
+                }
+
+                // Start the carousel!
+                if(totalSlides > 0) {
+                    startInterval();
+                }
+
+            } catch (error) {
+                console.error("Error loading carousel data.", error);
+            }
+        });
+    </script>
 </body>
 </html>
