@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podcast - The Norfolk Folklore Society</title>
-    <meta name="description" content="Listen to the myths, legends, and history of Norfolk with The Norfolk Folklore Society Podcast.">
+    <title>Podcast | The Norfolk Folklore Society</title>
+    <meta name="description" content="Listen to The Norfolk Folklore Society podcast. Tales of Black Shuck, witchcraft, and fenland myths.">
     
     <!-- Google Fonts: Corben Regular & Sora Light -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,14 +126,13 @@
         .section-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 4rem 2rem 4rem;
             text-align: center;
-            min-height: 60vh;
         }
 
         .section-title {
             font-size: 2rem;
-            margin-bottom: 3rem; 
+            margin-bottom: 2rem; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -143,6 +142,7 @@
         .section-title h2 {
             line-height: 1; 
             margin: 0;
+            text-transform: uppercase;
         }
 
         .section-title img {
@@ -152,117 +152,49 @@
             top: 6px; 
         }
 
-        /* Episodes Grid */
-        .stories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+        .intro-text {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            color: #e0e0e0;
         }
 
-        .story-card {
-            background-color: white;
-            color: var(--text-dark);
-            border-radius: 12px;
-            overflow: hidden;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .story-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); 
-        }
-
-        .story-card img.hero-img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-
-        .story-content {
+        /* Spotify Embed Container */
+        .spotify-wrapper {
+            background-color: rgba(0, 0, 0, 0.2);
             padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .story-content h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-green);
-        }
-        
-        .story-content .author-date {
-            font-size: 0.85rem;
-            color: #777;
-            margin-bottom: 1rem;
-            font-family: var(--font-body);
-        }
-
-        .story-content .author-date strong {
-            color: var(--primary-green);
-        }
-
-        .story-content p.excerpt {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-
-        .listen-btn {
-            margin-top: auto;
-            color: var(--primary-green);
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .loading-message {
-            grid-column: 1 / -1;
-            font-size: 1.2rem;
-            color: var(--text-light);
-            padding: 2rem;
-        }
-
-        /* Pagination Controls */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 3rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .pagination button {
-            background-color: transparent;
-            color: var(--text-light);
+            border-radius: 16px;
             border: 1px solid var(--accent-line);
-            padding: 0.5rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Ensures the iframe is responsive */
+        .spotify-wrapper iframe {
+            width: 100%;
+            display: block;
+        }
+
+        /* Button */
+        .btn-signup {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+            border: 2px solid var(--accent-line);
             cursor: pointer;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border-radius: 4px;
+            font-family: var(--font-headings);
         }
 
-        .pagination button.active, .pagination button:hover:not(:disabled) {
-            background-color: var(--secondary-green);
-            color: white;
-            border-color: var(--text-light);
-        }
-
-        .pagination button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            border-color: rgba(255, 255, 255, 0.2);
+        .btn-signup:hover {
+            transform: scale(1.05);
+            background-color: #2b3d1b;
         }
 
         /* Footer */
@@ -327,23 +259,6 @@
             margin: 0 0 0.5rem 0; 
         }
 
-        .btn-signup {
-            background-color: var(--primary-green);
-            color: var(--text-light);
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            display: inline-block;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .btn-signup:hover {
-            transform: scale(1.05);
-            background-color: #2b3d1b;
-        }
-
         .footer-right {
             flex: 1;
             display: flex;
@@ -367,6 +282,7 @@
             opacity: 1;
             transform: translateY(0);
         }
+
         .slide-in-left {
             opacity: 0;
             transform: translateX(-50px);
@@ -376,6 +292,7 @@
             opacity: 1;
             transform: translateX(0);
         }
+
         .slide-in-right {
             opacity: 0;
             transform: translateX(50px);
@@ -423,27 +340,37 @@
     </header>
 
     <!-- Floating Join Us Roundel -->
-    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join" target="_blank">
+    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
         JOIN<br>US
         <img src="images/tailpiece.svg" alt="decoration" loading="lazy">
     </a>
 
     <main>
-        <!-- Dynamic Podcast Section -->
+        <!-- Podcast Embed Section -->
         <section class="section-container animate-on-scroll">
             <div class="section-title">
                 <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
-                <h2>ALL EPISODES</h2>
+                <h2>THE PODCAST</h2>
                 <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
-            <div class="stories-grid" id="podcast-feed">
-                <p class="loading-message">Summoning episodes from the archive...</p>
+            <p class="intro-text animate-on-scroll">Join us as we traverse the marshes, woods, and ancient ruins of the county. Listen to the latest episodes directly below, or follow us on Spotify to never miss a tale.</p>
+            
+            <div class="spotify-wrapper animate-on-scroll">
+                
+                <!-- 
+                ====================================================
+                PASTE YOUR SPOTIFY EMBED CODE BELOW THIS LINE 
+                (I have added a placeholder iframe just so you can see how it looks!)
+                ====================================================
+                -->
+                <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/show/2akJFpxkl1x8AVtf2vHrMW?utm_source=generator&si=142f304c194f41b5" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>                <!-- 
+                ====================================================
+                PASTE YOUR SPOTIFY EMBED CODE ABOVE THIS LINE 
+                ====================================================
+                -->
+
             </div>
-
-            <!-- Pagination container -->
-            <div class="pagination" id="pagination-controls"></div>
-
         </section>
     </main>
 
@@ -453,13 +380,13 @@
             <div class="footer-left social-icons">
                 <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                <a href="https://spotify.com/show/2akJFpxkl1x8AVtf2vHrMW" target="_blank" aria-label="Spotify"><i class="fa-brands fa-spotify"></i></a>
+                <a href="https://spotify.com" target="_blank" aria-label="Spotify"><i class="fa-brands fa-spotify"></i></a>
             </div>
 
             <div class="footer-center">
                 <h2>JOIN US</h2>
                 <p>Sign up to our Substack newsletter</p>
-                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup" target="_blank">Sign Up Here</a>
+                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
             </div>
 
             <div class="footer-right">
@@ -468,160 +395,25 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Podcast RSS Integration and Animations -->
+    <!-- JavaScript for Animations -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            
-            const feedContainer = document.getElementById('podcast-feed');
-            const paginationContainer = document.getElementById('pagination-controls');
-            
-            let allEpisodes = [];
-            const episodesPerPage = 9;
-            let currentPage = 1;
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
 
-            // 1. Initialize the scroll observer
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
-                observer.observe(element);
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
             });
+        }, observerOptions);
 
-            // 2. Fetch ALL episodes at once via the rss2json API
-            // UPDATE THIS LINE BELOW WITH YOUR ACTUAL PODCAST RSS FEED URL
-            const rssUrl = 'https://open.spotify.com/show/2akJFpxkl1x8AVtf2vHrMW';
-            
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error("Network response was not ok");
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === 'ok' && data.items.length > 0) {
-                        allEpisodes = data.items;
-                        renderPage(currentPage);
-                    } else {
-                        feedContainer.innerHTML = '<p class="loading-message">Unable to load episodes at this time.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching Podcast RSS:', error);
-                    feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the episodes.</p>';
-                });
-
-            // 3. Render 9 episodes for the current page
-            function renderPage(page) {
-                feedContainer.innerHTML = ''; 
-                
-                const startIndex = (page - 1) * episodesPerPage;
-                const endIndex = startIndex + episodesPerPage;
-                const episodesToDisplay = allEpisodes.slice(startIndex, endIndex);
-
-                episodesToDisplay.forEach(item => {
-                    // Date formatting
-                    const dateObj = new Date(item.pubDate);
-                    const formattedDate = dateObj.toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        year: 'numeric' 
-                    });
-
-                    // Grab the thumbnail from the RSS item
-                    const imageUrl = item.thumbnail || 'images/Featured%20Stories%201.png';
-                    
-                    // Excerpt extraction (strip HTML tags)
-                    const tempDiv = document.createElement("div");
-                    tempDiv.innerHTML = item.description || "";
-                    let textContent = tempDiv.textContent || tempDiv.innerText || "";
-                    const excerpt = textContent.length > 120 
-                        ? textContent.substring(0, 120).trim() + "..." 
-                        : textContent;
-
-                    // Build Card HTML
-                    const cardHTML = `
-                        <a href="${item.link}" class="story-card animate-on-scroll" target="_blank">
-                            <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
-                            <div class="story-content">
-                                <h3>${item.title}</h3>
-                                <p class="author-date"><strong>${formattedDate}</strong></p>
-                                <p class="excerpt">${excerpt}</p>
-                                <div class="listen-btn">
-                                    <i class="fa-brands fa-spotify"></i> Listen Now
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                    
-                    feedContainer.insertAdjacentHTML('beforeend', cardHTML);
-                });
-
-                // Force the observer to watch the brand new episode cards so they fade in
-                document.querySelectorAll('.story-card').forEach(element => {
-                    observer.observe(element);
-                });
-
-                renderPaginationControls(page);
-                
-                if (page > 1) {
-                    document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-
-            // 4. Render the pagination buttons
-            function renderPaginationControls(activePage) {
-                const totalPages = Math.ceil(allEpisodes.length / episodesPerPage);
-                paginationContainer.innerHTML = ''; 
-
-                if (totalPages <= 1) return; 
-
-                // Previous Button
-                const prevBtn = document.createElement('button');
-                prevBtn.innerHTML = '&#10094; Prev';
-                prevBtn.disabled = activePage === 1;
-                prevBtn.addEventListener('click', () => {
-                    currentPage--;
-                    renderPage(currentPage);
-                });
-                paginationContainer.appendChild(prevBtn);
-
-                // Page Number Buttons
-                for (let i = 1; i <= totalPages; i++) {
-                    const pageBtn = document.createElement('button');
-                    pageBtn.innerText = i;
-                    if (i === activePage) {
-                        pageBtn.classList.add('active');
-                    }
-                    pageBtn.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage(currentPage);
-                    });
-                    paginationContainer.appendChild(pageBtn);
-                }
-
-                // Next Button
-                const nextBtn = document.createElement('button');
-                nextBtn.innerHTML = 'Next &#10095;';
-                nextBtn.disabled = activePage === totalPages;
-                nextBtn.addEventListener('click', () => {
-                    currentPage++;
-                    renderPage(currentPage);
-                });
-                paginationContainer.appendChild(nextBtn);
-            }
+        document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
+            observer.observe(element);
         });
     </script>
 </body>
