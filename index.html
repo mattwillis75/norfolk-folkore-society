@@ -368,6 +368,14 @@
             font-size: 0.9rem;
             line-height: 1.5;
         }
+        
+        /* New Loading Message class for homepage */
+        .loading-message {
+            grid-column: 1 / -1;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            padding: 2rem;
+        }
 
         /* Footer */
         footer {
@@ -669,36 +677,8 @@
                 <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
             
-            <div class="stories-grid">
-                <!-- Story 1 -->
-                <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <img src="images/Featured%20Stories%201.png" alt="Whirlwinds" class="hero-img" loading="lazy">
-                    <div class="story-content">
-                        <h3>The Norfolk whirlwinds sent by the Devil</h3>
-                        <p class="author-date">by <strong>Stacia Briggs</strong><br>Dec 23, 2025</p>
-                        <p class="excerpt">Did the ghost of Old Roger whistle up sandstorms in order to foil German bombers intent on wiping out Breck-...</p>
-                    </div>
-                </a>
-
-                <!-- Story 2 -->
-                <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <img src="images/Featured%20Stories%202.png" alt="Vanishing Mansions" class="hero-img" loading="lazy">
-                    <div class="story-content">
-                        <h3>The Norfolk mansions that vanish into thin air</h3>
-                        <p class="author-date">by <strong>Stacia Briggs</strong><br>Oct 7, 2025</p>
-                        <p class="excerpt">Phantom houses are a rare but persistent phenomenon in East Anglia, with eerie tales of grand mansions appearing and vanishing...</p>
-                    </div>
-                </a>
-
-                <!-- Story 3 -->
-                <a href="https://norfolkfolkloresociety.substack.com/" class="story-card">
-                    <img src="images/Featured%20Stories%203.png" alt="Goat's Head" class="hero-img" loading="lazy">
-                    <div class="story-content">
-                        <h3>The Cursed Goat's Head of Strumpshaw</h3>
-                        <p class="author-date">by <strong>Stacia Briggs</strong><br>Jul 4, 2025</p>
-                        <p class="excerpt">The Mafia might have opted for a horse's head in the bedroom, but in Strumpshaw, it was the haunted head of a goat that left villagers trembling...</p>
-                    </div>
-                </a>
+            <div class="stories-grid" id="featured-stories-grid">
+                <p class="loading-message">Summoning stories from the archive...</p>
             </div>
         </section>
     </main>
@@ -727,7 +707,7 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Animations and Carousel -->
+    <!-- JavaScript for Animations, Carousel, and Substack API -->
     <script>
         // Carousel Logic
         let currentSlide = 0;
@@ -783,6 +763,72 @@
 
         document.querySelectorAll('.animate-on-scroll, .portrait-animate, .slide-in-left, .slide-in-right').forEach(element => {
             observer.observe(element);
+        });
+
+        // Substack API Fetch for Featured Stories (Latest 3)
+        document.addEventListener("DOMContentLoaded", function() {
+            const featuredGrid = document.getElementById('featured-stories-grid');
+            
+            // Limit set to exactly 3 for the homepage
+            const substackUrl = 'https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=3&offset=0';
+            const proxyBase = 'https://little-mountain-e182.thefolklorebox.workers.dev/?url=';
+            const apiUrl = proxyBase + encodeURIComponent(substackUrl);
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok");
+                    return response.json();
+                })
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        featuredGrid.innerHTML = ''; // Clear loading text
+                        
+                        data.forEach(item => {
+                            const dateObj = new Date(item.post_date);
+                            const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric', 
+                                year: 'numeric' 
+                            });
+
+                            const imageUrl = item.cover_image || 'images/Featured%20Stories%201.png';
+                            
+                            let textContent = item.description || "";
+                            const excerpt = textContent.length > 120 
+                                ? textContent.substring(0, 120).trim() + "..." 
+                                : textContent;
+
+                            let author = "Ada Nemesis";
+                            if (item.authors && item.authors.length > 0) {
+                                author = item.authors[0].name;
+                            }
+
+                            const cardHTML = `
+                                <a href="${item.canonical_url}" class="story-card animate-on-scroll" target="_blank">
+                                    <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
+                                    <div class="story-content">
+                                        <h3>${item.title}</h3>
+                                        <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
+                                        <p class="excerpt">${excerpt}</p>
+                                    </div>
+                                </a>
+                            `;
+                            
+                            featuredGrid.insertAdjacentHTML('beforeend', cardHTML);
+                        });
+
+                        // Re-trigger scroll observer for dynamic story cards
+                        document.querySelectorAll('#featured-stories-grid .story-card').forEach(element => {
+                            observer.observe(element);
+                        });
+                    } else {
+                        featuredGrid.innerHTML = '<p class="loading-message">No stories found at this time.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching Substack API:', error);
+                    featuredGrid.innerHTML = '<p class="loading-message">There was an error summoning the featured stories.</p>';
+                });
         });
     </script>
 </body>
