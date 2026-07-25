@@ -489,16 +489,20 @@
             });
 
             // 2. Fetch ALL stories at once to power the client-side pagination
-            // Substack limit=200 handles massive archives perfectly
-            const substackUrl = 'https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=200';
-            const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(substackUrl)}`;
+            // The JSON text list is tiny. Images will ONLY download when rendered on the page!
+            const cacheBuster = Date.now();
+            const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=200&_cb=${cacheBuster}`;
+            const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(substackUrl)}`;
 
             fetch(apiUrl)
                 .then(response => {
                     if (!response.ok) throw new Error("Network response was not ok");
                     return response.json();
                 })
-                .then(data => {
+                .then(proxyData => {
+                    // We must unpack the data from the stable proxy's 'contents' wrapper
+                    const data = JSON.parse(proxyData.contents);
+                    
                     if (Array.isArray(data) && data.length > 0) {
                         allStories = data;
                         renderPage(currentPage);
