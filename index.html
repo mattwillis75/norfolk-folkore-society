@@ -562,85 +562,14 @@
 
     <main>
         <!-- Carousel Section -->
-        <section class="carousel-container animate-on-scroll">
-            <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
-            <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
-
-            <!-- Slide 1 -->
-            <div class="carousel-slide slide-1 active" style="background-image: url('images/carousel-1.jpg');">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>Live at the Black Shuck Festival</h3>
-                    <div class="spotify-save">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                    </div>
-                    <div class="overlay-bottom">
-                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
-                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="carousel-slide slide-2" style="background-image: url('images/carousel-2.jpg');">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>The Ghost Dogs of East Anglia</h3>
-                    <div class="spotify-save">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                    </div>
-                    <div class="overlay-bottom">
-                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
-                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 3 -->
-            <div class="carousel-slide slide-3" style="background-image: url('images/carousel-3.jpg');">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>Witches of King's Lynn</h3>
-                    <div class="spotify-save">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                    </div>
-                    <div class="overlay-bottom">
-                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
-                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 4 -->
-            <div class="carousel-slide slide-4" style="background-image: url('images/carousel-4.jpg');">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>Blickling Hall's Headless Queen</h3>
-                    <div class="spotify-save">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                    </div>
-                    <div class="overlay-bottom">
-                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
-                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 5 -->
-            <div class="carousel-slide slide-5" style="background-image: url('images/carousel-5.jpg');">
-                <div class="carousel-overlay">
-                    <h2>PODCAST</h2>
-                    <h3>The Lantern Men of the Fens</h3>
-                    <div class="spotify-save">
-                        <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
-                    </div>
-                    <div class="overlay-bottom">
-                        <p>Add some description text here - Add some description text here - Add some description text here - Add some description text here.</p>
-                        <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <section class="carousel-container animate-on-scroll" id="dynamic-carousel">
+    <button class="carousel-arrow arrow-left" onclick="moveSlide(-1)">&#10094;</button>
+    <button class="carousel-arrow arrow-right" onclick="moveSlide(1)">&#10095;</button>
+    
+    <div id="carousel-slides-container">
+        <!-- Slides will be injected here by JS -->
+    </div>
+</section>
 
         <!-- About Us Section -->
         <section class="section-container animate-on-scroll">
@@ -817,5 +746,65 @@
             }
         });
     </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const container = document.getElementById('carousel-slides-container');
+        if(!container) return;
+
+        try {
+            const response = await fetch('carousel.txt', { cache: 'no-store' });
+            if (!response.ok) return;
+            
+            const text = await response.text();
+            const slidesRaw = text.split('---');
+            let slideIndex = 0;
+
+            slidesRaw.forEach(rawSlide => {
+                if(!rawSlide.trim()) return;
+                let slide = { format: "", heading: "", desc: "", image: "" };
+                
+                rawSlide.trim().split('\n').forEach(line => {
+                    const idx = line.indexOf(':');
+                    if(idx > -1) {
+                        const key = line.slice(0,idx).trim().toLowerCase();
+                        const val = line.slice(idx+1).trim();
+                        if(key === 'format') slide.format = val;
+                        if(key === 'heading') slide.heading = val;
+                        if(key === 'description') slide.desc = val;
+                        if(key === 'image') slide.image = val;
+                    }
+                });
+
+                if (slide.heading) {
+                    const isActive = slideIndex === 0 ? "active" : "";
+                    const html = `
+                    <div class="carousel-slide slide-${slideIndex + 1} ${isActive}" style="background-image: url('${slide.image}');">
+                        <div class="carousel-overlay">
+                            <h2>${slide.format}</h2>
+                            <h3>${slide.heading}</h3>
+                            <div class="spotify-save">
+                                <a href="https://spotify.com" target="_blank"><i class="fa-solid fa-circle-plus"></i> Save on Spotify</a>
+                            </div>
+                            <div class="overlay-bottom">
+                                <p>${slide.desc}</p>
+                                <a href="#" class="play-btn"><i class="fa-regular fa-circle-play"></i></a>
+                            </div>
+                        </div>
+                    </div>`;
+                    container.innerHTML += html;
+                    slideIndex++;
+                }
+            });
+
+            // Re-bind the slides node list for your existing moveSlide() function
+            window.slides = document.querySelectorAll('.carousel-slide');
+            window.totalSlides = window.slides.length;
+            window.currentSlide = 0;
+
+        } catch (error) {
+            console.error("Error loading carousel data.", error);
+        }
+    });
+</script>
 </body>
 </html>
