@@ -464,7 +464,6 @@
             const feedContainer = document.getElementById('substack-feed');
             const paginationContainer = document.getElementById('pagination-controls');
             
-            let allStories = [];
             const storiesPerPage = 9;
             let currentPage = 1;
 
@@ -488,43 +487,50 @@
                 observer.observe(element);
             });
 
-            // 2. Fetch ALL stories at once to power the client-side pagination
-            // The JSON text list is tiny. Images will ONLY download when rendered on the page!
-            const cacheBuster = Date.now();
-            const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=200&_cb=${cacheBuster}`;
-            const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(substackUrl)}`;
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error("Network response was not ok");
-                    return response.json();
-                })
-                .then(proxyData => {
-                    // We must unpack the data from the stable proxy's 'contents' wrapper
-                    const data = JSON.parse(proxyData.contents);
-                    
-                    if (Array.isArray(data) && data.length > 0) {
-                        allStories = data;
-                        renderPage(currentPage);
-                    } else {
-                        feedContainer.innerHTML = '<p class="loading-message">Unable to load stories at this time.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching Substack API:', error);
-                    feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
-                });
-
-            // 3. Render 9 stories for the current page
-            function renderPage(page) {
-                feedContainer.innerHTML = ''; 
+            // 2. Fetch precisely 9 stories from Substack based on the current page
+            function fetchPage(page) {
+                // Determine how many stories to skip (e.g., Page 1 skips 0, Page 2 skips 9)
+                const offset = (page - 1) * storiesPerPage;
                 
-                const startIndex = (page - 1) * storiesPerPage;
-                const endIndex = startIndex + storiesPerPage;
-                const storiesToDisplay = allStories.slice(startIndex, endIndex);
+                // Native Substack API URL using limits and offsets
+                const substackUrl = `https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=${storiesPerPage}&offset=${offset}`;
+                
+                // Add a timestamp cache buster so the proxy knows it is a brand new page request
+                const cacheBuster = Date.now();
+                const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(substackUrl + '&_cb=' + cacheBuster)}`;
 
-                storiesToDisplay.forEach(item => {
-                    // Date formatting
+                feedContainer.innerHTML = '<p class="loading-message">Summoning stories from the archive...</p>';
+                paginationContainer.innerHTML = ''; 
+
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Network response was not ok");
+                        return response.json();
+                    })
+                    .then(proxyData => {
+                        // Extract the JSON data from the proxy's 'contents' wrapper
+                        const data = JSON.parse(proxyData.contents);
+                        
+                        if (Array.isArray(data) && data.length > 0) {
+                            renderStories(data);
+                            renderPaginationControls(page, data.length);
+                        } else if (page === 1) {
+                            feedContainer.innerHTML = '<p class="loading-message">No stories found at this time.</p>';
+                        } else {
+                            feedContainer.innerHTML = '<p class="loading-message">You have reached the end of the archive.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching Substack API:', error);
+                        feedContainer.innerHTML = '<p class="loading-message">There was an error summoning the archive.</p>';
+                    });
+            }
+
+            // 3. Render the fetched 9 stories into the HTML grid
+            function renderStories(stories) {
+                feedContainer.innerHTML = ''; 
+
+                stories.forEach(item => {
                     const dateObj = new Date(item.post_date);
                     const formattedDate = dateObj.toLocaleDateString('en-US', { 
                         month: 'short', 
@@ -532,22 +538,18 @@
                         year: 'numeric' 
                     });
 
-                    // Substack native API provides the cover_image directly
                     const imageUrl = item.cover_image || 'images/Featured%20Stories%201.png';
                     
-                    // The description field acts as the subtitle/excerpt
                     let textContent = item.description || "";
                     const excerpt = textContent.length > 120 
                         ? textContent.substring(0, 120).trim() + "..." 
                         : textContent;
 
-                    // Pull author name natively if available
                     let author = "Ada Nemesis";
                     if (item.authors && item.authors.length > 0) {
                         author = item.authors[0].name;
                     }
 
-                    // Build Card HTML
                     const cardHTML = `
                         <a href="${item.canonical_url}" class="story-card animate-on-scroll" target="_blank">
                             <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
@@ -562,60 +564,45 @@
                     feedContainer.insertAdjacentHTML('beforeend', cardHTML);
                 });
 
-                // Force the observer to watch the brand new story cards so they fade in
+                // Attach scroll animation to the brand new story cards
                 document.querySelectorAll('.story-card').forEach(element => {
                     observer.observe(element);
                 });
-
-                renderPaginationControls(page);
-                
-                // Scroll back to the top of the stories section on page change
-                if (page > 1) {
-                    document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
-                }
             }
 
-            // 4. Render the pagination buttons
-            function renderPaginationControls(activePage) {
-                const totalPages = Math.ceil(allStories.length / storiesPerPage);
+            // 4. Render Previous/Next buttons since we don't know the exact total number of stories
+            function renderPaginationControls(activePage, itemsReturned) {
                 paginationContainer.innerHTML = ''; 
-
-                if (totalPages <= 1) return; 
 
                 // Previous Button
                 const prevBtn = document.createElement('button');
-                prevBtn.innerHTML = '&#10094; Prev';
+                prevBtn.innerHTML = '&#10094; Previous';
                 prevBtn.disabled = activePage === 1;
                 prevBtn.addEventListener('click', () => {
                     currentPage--;
-                    renderPage(currentPage);
+                    fetchPage(currentPage);
+                    scrollToTop();
                 });
                 paginationContainer.appendChild(prevBtn);
 
-                // Page Number Buttons
-                for (let i = 1; i <= totalPages; i++) {
-                    const pageBtn = document.createElement('button');
-                    pageBtn.innerText = i;
-                    if (i === activePage) {
-                        pageBtn.classList.add('active');
-                    }
-                    pageBtn.addEventListener('click', () => {
-                        currentPage = i;
-                        renderPage(currentPage);
-                    });
-                    paginationContainer.appendChild(pageBtn);
-                }
-
-                // Next Button
+                // Next Button (Disable if we received fewer than 9 items, indicating the last page)
                 const nextBtn = document.createElement('button');
                 nextBtn.innerHTML = 'Next &#10095;';
-                nextBtn.disabled = activePage === totalPages;
+                nextBtn.disabled = itemsReturned < storiesPerPage;
                 nextBtn.addEventListener('click', () => {
                     currentPage++;
-                    renderPage(currentPage);
+                    fetchPage(currentPage);
+                    scrollToTop();
                 });
                 paginationContainer.appendChild(nextBtn);
             }
+
+            function scrollToTop() {
+                document.querySelector('.section-title').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Fire the initial load for Page 1
+            fetchPage(currentPage);
         });
     </script>
 </body>
