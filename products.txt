@@ -4,9 +4,9 @@ Sections: Badges, Postcards
 Postal Class: Standard
 Item Cost: £2.00
 ---
-Title: Siofra and Stacia Print
+Title: 
 Main Image: images/siofra-and-stacia-print.jpg.jpg
-Sections: Print
-Postal Class: B
-Item Cost: £12.00
+Sections: 
+Postal Class: C
+Item Cost: £
 ---
