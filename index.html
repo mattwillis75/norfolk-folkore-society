@@ -369,7 +369,6 @@
             line-height: 1.5;
         }
         
-        /* New Loading Message class for homepage */
         .loading-message {
             grid-column: 1 / -1;
             font-size: 1.2rem;
@@ -473,7 +472,6 @@
            ANIMATION CLASSES 
            ----------------------- */
            
-        /* Fade up on scroll */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -484,7 +482,6 @@
             transform: translateY(0);
         }
 
-        /* Scale up from center (Portraits Entrance) */
         .portrait-animate {
             opacity: 0;
             transform: scale(0);
@@ -496,7 +493,6 @@
             transform: scale(1);
         }
 
-        /* Slide in from left */
         .slide-in-left {
             opacity: 0;
             transform: translateX(-50px);
@@ -507,7 +503,6 @@
             transform: translateX(0);
         }
 
-        /* Slide in from right */
         .slide-in-right {
             opacity: 0;
             transform: translateX(50px);
@@ -707,7 +702,10 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Animations, Carousel, and Substack API -->
+    <!-- Include the local archive.js data file -->
+    <script src="archive.js"></script>
+
+    <!-- JavaScript for Animations, Carousel, and Local Archive Data -->
     <script>
         // Carousel Logic
         let currentSlide = 0;
@@ -765,70 +763,57 @@
             observer.observe(element);
         });
 
-        // Substack API Fetch for Featured Stories (Latest 3)
+        // Load Featured Stories from archive.js (Latest 3)
         document.addEventListener("DOMContentLoaded", function() {
             const featuredGrid = document.getElementById('featured-stories-grid');
             
-            // Limit set to exactly 3 for the homepage
-            const substackUrl = 'https://norfolkfolkloresociety.substack.com/api/v1/archive?sort=new&limit=3&offset=0';
-            const proxyBase = 'https://little-mountain-e182.thefolklorebox.workers.dev/?url=';
-            const apiUrl = proxyBase + encodeURIComponent(substackUrl);
+            // Check if the localArchive variable from archive.js loaded successfully
+            if (typeof localArchive !== 'undefined' && localArchive.length > 0) {
+                featuredGrid.innerHTML = ''; // Clear loading text
+                
+                // Grab only the first 3 stories for the homepage
+                const latestStories = localArchive.slice(0, 3);
+                
+                latestStories.forEach(item => {
+                    const dateObj = new Date(item.post_date);
+                    const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                    });
 
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error("Network response was not ok");
-                    return response.json();
-                })
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        featuredGrid.innerHTML = ''; // Clear loading text
-                        
-                        data.forEach(item => {
-                            const dateObj = new Date(item.post_date);
-                            const formattedDate = dateObj.toLocaleDateString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric', 
-                                year: 'numeric' 
-                            });
+                    const imageUrl = item.cover_image || 'images/norfolk-folklore-society-logo-main.png';
+                    
+                    let textContent = item.description || "";
+                    const excerpt = textContent.length > 120 
+                        ? textContent.substring(0, 120).trim() + "..." 
+                        : textContent;
 
-                            const imageUrl = item.cover_image || 'images/Featured%20Stories%201.png';
-                            
-                            let textContent = item.description || "";
-                            const excerpt = textContent.length > 120 
-                                ? textContent.substring(0, 120).trim() + "..." 
-                                : textContent;
-
-                            let author = "Ada Nemesis";
-                            if (item.authors && item.authors.length > 0) {
-                                author = item.authors[0].name;
-                            }
-
-                            const cardHTML = `
-                                <a href="${item.canonical_url}" class="story-card animate-on-scroll" target="_blank">
-                                    <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
-                                    <div class="story-content">
-                                        <h3>${item.title}</h3>
-                                        <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
-                                        <p class="excerpt">${excerpt}</p>
-                                    </div>
-                                </a>
-                            `;
-                            
-                            featuredGrid.insertAdjacentHTML('beforeend', cardHTML);
-                        });
-
-                        // Re-trigger scroll observer for dynamic story cards
-                        document.querySelectorAll('#featured-stories-grid .story-card').forEach(element => {
-                            observer.observe(element);
-                        });
-                    } else {
-                        featuredGrid.innerHTML = '<p class="loading-message">No stories found at this time.</p>';
+                    let author = "Ada Nemesis";
+                    if (item.authors && item.authors.length > 0) {
+                        author = item.authors[0].name;
                     }
-                })
-                .catch(error => {
-                    console.error('Error fetching Substack API:', error);
-                    featuredGrid.innerHTML = '<p class="loading-message">There was an error summoning the featured stories.</p>';
+
+                    const card = document.createElement('a');
+                    card.href = item.canonical_url;
+                    card.className = "story-card animate-on-scroll";
+                    card.target = "_blank";
+                    card.innerHTML = `
+                        <img src="${imageUrl}" alt="${item.title}" class="hero-img" loading="lazy">
+                        <div class="story-content">
+                            <h3>${item.title}</h3>
+                            <p class="author-date">by <strong>${author}</strong><br>${formattedDate}</p>
+                            <p class="excerpt">${excerpt}</p>
+                        </div>
+                    `;
+                    
+                    featuredGrid.appendChild(card);
+                    // Slight delay ensures the browser registers the element before animating
+                    setTimeout(() => observer.observe(card), 50); 
                 });
+            } else {
+                featuredGrid.innerHTML = '<p class="loading-message" style="color: #ffcccc;">Cannot find the archive data. Make sure <strong>archive.js</strong> is saved in the exact same folder as this page.</p>';
+            }
         });
     </script>
 </body>
