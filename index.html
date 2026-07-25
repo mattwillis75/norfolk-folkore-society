@@ -464,28 +464,26 @@
             z-index: 1;
         }
 
-        .eyes-img {
+        .eye-glow {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 2;
-            animation: pulse-glow 2.5s infinite ease-in-out;
+            transform-origin: center center;
+            animation: pulse-size 2.5s infinite ease-in-out;
         }
 
-        @keyframes pulse-glow {
+        @keyframes pulse-size {
             0% {
-                filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+                transform: scale(1);
             }
             50% {
-                /* Aggressively stacked drop-shadows with full opacity for maximum visibility */
-                filter: drop-shadow(0 0 25px rgba(255, 0, 0, 1)) 
-                        drop-shadow(0 0 50px rgba(255, 0, 0, 1)) 
-                        drop-shadow(0 0 100px rgba(255, 0, 0, 1));
+                transform: scale(0.3); /* Shrinks the image to 30% of its size */
             }
             100% {
-                filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8));
+                transform: scale(1);
             }
         }
 
@@ -660,7 +658,8 @@
             <div class="footer-right">
                 <div class="shuck-container">
                     <img src="images/Shuck.png" alt="Black Shuck" class="shuck-img" loading="lazy">
-                    <img src="images/Eyes.png" alt="Glowing Red Eyes" class="eyes-img" loading="lazy">
+                    <img src="images/left-eye-glow.png" alt="Left Eye Glow" class="eye-glow" loading="lazy">
+                    <img src="images/right-eye-glow.png" alt="Right Eye Glow" class="eye-glow" loading="lazy">
                 </div>
             </div>
         </div>
