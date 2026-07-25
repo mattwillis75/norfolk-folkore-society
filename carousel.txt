@@ -1,0 +1,30 @@
+Slide: 1
+Format: PODCAST
+Heading: Live at the Black Shuck Festival
+Description: Add some description text here - Add some description text here - Add some description text here - Add some description text here.
+Image: images/carousel-1.jpg
+---
+Slide: 2
+Format: PODCAST
+Heading: The Ghost Dogs of East Anglia
+Description: Add some description text here - Add some description text here - Add some description text here - Add some description text here.
+Image: images/carousel-2.jpg
+---
+Slide: 3
+Format: PODCAST
+Heading: Witches of King's Lynn
+Description: Add some description text here - Add some description text here - Add some description text here - Add some description text here.
+Image: images/carousel-3.jpg
+---
+Slide: 4
+Format: PODCAST
+Heading: Blickling Hall's Headless Queen
+Description: Add some description text here - Add some description text here - Add some description text here - Add some description text here.
+Image: images/carousel-4.jpg
+---
+Slide: 5
+Format: PODCAST
+Heading: The Lantern Men of the Fens
+Description: Add some description text here - Add some description text here - Add some description text here - Add some description text here.
+Image: images/carousel-5.jpg
+---
