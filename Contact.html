@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | The Norfolk Folklore Society</title>
+    <meta name="description" content="Get in touch with The Norfolk Folklore Society. Send us your stories, questions, or inquiries.">
+    
+    <!-- Google Fonts: Corben Regular & Sora Light -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Corben&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for standard icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS Variables for Colors and Fonts */
+        :root {
+            --primary-green: #375023; /* Dark earthy green */
+            --secondary-green: #4b6b33; /* Lighter green */
+            --footer-green: #a7b799; /* Sage green for footer */
+            --accent-line: #889b77; /* Color for borders and lines */
+            --text-light: #fdfdfd;
+            --text-dark: #333333;
+            --font-headings: 'Corben', serif;
+            --font-body: 'Sora', sans-serif;
+        }
+
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 300;
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, .nav-links a, .btn {
+            font-family: var(--font-headings);
+            font-weight: 400;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-green);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-line);
+        }
+
+        .logo-container img {
+            max-width: 750px; 
+            width: 95%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #d1dfc1;
+            transform: scale(1.05);
+        }
+
+        /* Floating 'Join Us' Roundel */
+        .floating-join {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 90px;
+            height: 90px;
+            background-color: var(--secondary-green);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-family: var(--font-headings);
+            font-size: 1.1rem;
+            z-index: 1001;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            line-height: 1.1;
+        }
+
+        .floating-join img {
+            width: 30px;
+            margin-top: 5px;
+        }
+
+        .floating-join:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Main Content Sections */
+        .section-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 3rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .section-title h2 {
+            line-height: 1; 
+            margin: 0;
+        }
+
+        .section-title img {
+            height: 2rem;
+            width: auto;
+            position: relative;
+            top: 6px; 
+        }
+
+        /* Contact Form Styles */
+        .contact-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid var(--accent-line);
+        }
+
+        .contact-wrapper p.intro-text {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent-line);
+            background-color: var(--text-light);
+            color: var(--text-dark);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            box-shadow: 0 0 10px rgba(209, 223, 193, 0.5);
+            border-color: var(--footer-green);
+        }
+
+        /* Reuse Button Styles */
+        .btn-signup {
+            background-color: var(--primary-green);
+            color: var(--text-light);
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: inline-block;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            white-space: nowrap;
+            border: 2px solid var(--accent-line);
+            cursor: pointer;
+            font-family: var(--font-headings);
+        }
+
+        .btn-signup:hover {
+            transform: scale(1.05);
+            background-color: #2b3d1b;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        /* Modal / Pop-up Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--primary-green);
+            border: 2px solid var(--accent-line);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--footer-green);
+        }
+
+        .modal-content p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--footer-green);
+            color: var(--primary-green);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .social-icons a {
+            background-color: white;
+            color: var(--footer-green);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-center {
+            text-align: center;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem; 
+        }
+
+        .footer-center h2 {
+            font-size: 2.2rem;
+            margin: 0; 
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .footer-center p {
+            font-size: 1.2rem;
+            margin: 0 0 0.5rem 0; 
+        }
+
+        .footer-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-placeholder-circle {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+        }
+
+        /* Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-in-left.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .slide-in-right.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .contact-wrapper {
+                padding: 2rem 1.5rem;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-left {
+                justify-content: center;
+            }
+            .footer-right {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society" loading="lazy">
+            </a>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="stories.html">STORIES</a></li>
+                <li><a href="map.html">MAP</a></li>
+                <li><a href="shop.html">SHOP</a></li>
+                <li><a href="podcast.html">PODCAST</a></li>
+                <li><a href="contact.html" class="active">CONTACT US</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Floating Join Us Roundel -->
+    <a href="https://norfolkfolkloresociety.substack.com/" class="floating-join">
+        JOIN<br>US
+        <img src="images/tailpiece.svg" alt="decoration" loading="lazy">
+    </a>
+
+    <main>
+        <!-- Contact Section -->
+        <section class="section-container animate-on-scroll">
+            <div class="section-title">
+                <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
+                <h2>CONTACT US</h2>
+                <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
+            </div>
+            
+            <div class="contact-wrapper">
+                <p class="intro-text">Have a tale to tell, a question about an upcoming event, or simply want to say hello? Send your message through the ether below.</p>
+                
+                <!-- The form uses FormSubmit to send directly to your email via AJAX -->
+                <form id="contactForm" action="https://formsubmit.co/norfolkfolkloresociety@gmail.com" method="POST">
+                    
+                    <!-- FormSubmit Configuration Settings -->
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_subject" value="New message from Norfolk Folklore Society website!">
+                    <input type="hidden" name="_template" value="table">
+                    
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required placeholder="e.g. Black Shuck">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="you@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" rows="6" required placeholder="Tell us your story..."></textarea>
+                    </div>
+                    
+                    <div class="submit-container">
+                        <button type="submit" class="btn-signup" id="submitBtn">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Success Modal Pop-up -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <h2>THANK YOU</h2>
+            <p>Your message has vanished into the mists of the Fens. We will be in touch with you shortly!</p>
+            <button class="btn-signup" id="closeModalBtn">Return</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="animate-on-scroll">
+        <div class="footer-content">
+            <div class="footer-left social-icons">
+                <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://spotify.com" target="_blank" aria-label="Spotify"><i class="fa-brands fa-spotify"></i></a>
+            </div>
+
+            <div class="footer-center">
+                <h2>JOIN US</h2>
+                <p>Sign up to our Substack newsletter</p>
+                <a href="https://norfolkfolkloresociety.substack.com/" class="btn-signup">Sign Up Here</a>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-placeholder-circle"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Animations and AJAX Form Submission -->
+    <script>
+        // Scroll Animation Logic
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
+            observer.observe(element);
+        });
+
+        // AJAX Form Submission Logic
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successModal = document.getElementById('successModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            // Change button text to indicate loading
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = 'Sending...';
+            submitBtn.style.opacity = '0.7';
+            submitBtn.disabled = true;
+
+            // Fetch request to submit the form silently
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show the styled modal
+                    successModal.classList.add('active');
+                    // Reset the form inputs
+                    form.reset();
+                } else {
+                    alert('Oops! There was a problem submitting your form.');
+                }
+            })
+            .catch(error => {
+                alert('Oops! There was a network error. Please try again.');
+            })
+            .finally(() => {
+                // Restore button state
+                submitBtn.innerText = originalBtnText;
+                submitBtn.style.opacity = '1';
+                submitBtn.disabled = false;
+            });
+        });
+
+        // Close Modal Logic
+        closeModalBtn.addEventListener('click', () => {
+            successModal.classList.remove('active');
+        });
+
+        // Optional: Close modal if user clicks outside the modal box
+        successModal.addEventListener('click', (e) => {
+            if (e.target === successModal) {
+                successModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
