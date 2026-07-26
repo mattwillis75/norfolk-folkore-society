@@ -2,5 +2,5 @@ Title: Norfolk Folklore Society Badge Pack
 Main Image: ./images/postcard-1.jpg
 Sections: Badges, Postcards
 Postal Class: 
-Item Cost: £3.00
+Item Cost: 2.00
 ---
