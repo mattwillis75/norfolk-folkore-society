@@ -44,7 +44,7 @@
             font-weight: 400;
         }
 
-        /* Header (Exact Match to Homepage) */
+        /* Header */
         header {
             position: sticky;
             top: 0;
@@ -283,6 +283,12 @@
         .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
 
+        .slide-in-left { opacity: 0; transform: translateX(-50px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .slide-in-left.is-visible { opacity: 1; transform: translateX(0); }
+
+        .slide-in-right { opacity: 0; transform: translateX(50px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .slide-in-right.is-visible { opacity: 1; transform: translateX(0); }
+
         @media (max-width: 768px) {
             .footer-content { flex-direction: column; text-align: center; }
             .footer-left, .footer-right { justify-content: center; }
@@ -298,13 +304,13 @@
 <body>
 
     <!-- Header -->
-    <header>
+    <header id="main-header">
         <div class="logo-container">
             <a href="index.html">
                 <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society" loading="lazy">
             </a>
         </div>
-        <nav>
+        <nav class="main-nav">
             <ul class="nav-links">
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="stories.html">STORIES</a></li>
@@ -333,9 +339,9 @@
 
         <section class="section-container animate-on-scroll">
             <div class="section-title">
-                <img src="images/header-decoration-left.svg" alt="Left Decoration" loading="lazy">
+                <img src="images/header-decoration-left.svg" alt="Left Decoration" class="slide-in-left" loading="lazy">
                 <h2>SHOP WARE & GOODS</h2>
-                <img src="images/header-decoration-right.svg" alt="Right Decoration" loading="lazy">
+                <img src="images/header-decoration-right.svg" alt="Right Decoration" class="slide-in-right" loading="lazy">
             </div>
 
             <div class="shop-filters" id="shop-filters">
@@ -419,7 +425,8 @@
 
         document.addEventListener("DOMContentLoaded", async () => {
             
-            document.querySelectorAll('.animate-on-scroll').forEach(element => {
+            // Watch for all animation classes, including the left/right slide images!
+            document.querySelectorAll('.animate-on-scroll, .slide-in-left, .slide-in-right').forEach(element => {
                 observer.observe(element);
             });
 
@@ -702,9 +709,9 @@
                                 </a>
                             </div>
                         `;
-                        // Re-trigger intersection observer for newly added cards
-                        document.querySelectorAll('.product-card').forEach(el => observer.observe(el));
                     });
+                    // Re-trigger intersection observer for newly added cards so they animate
+                    document.querySelectorAll('.product-card').forEach(el => observer.observe(el));
                 }
                 renderGrid('All');
 
