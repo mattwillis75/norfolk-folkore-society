@@ -38,17 +38,25 @@
             font-family: var(--font-body);
             font-weight: 300;
             background-color: var(--primary-green);
-            
-            /* --- New Background Image Implementation --- */
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* --- Background Image Layer with 50% Transparency --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Ensures the image stays behind all your content */
             background-image: url('images/wallpaper-1.jpg');
             background-repeat: no-repeat;
             background-position: center top;
-            background-attachment: fixed; /* Keeps the background still while scrolling */
             /* Scales up proportionally if larger than 1920px, but won't scale down below 1920px */
             background-size: max(100vw, 1920px) auto; 
-            
-            color: var(--text-light);
-            line-height: 1.6;
+            opacity: 0.5; /* 50% transparency */
         }
 
         h1, h2, h3, h4, .nav-links a, .btn {
