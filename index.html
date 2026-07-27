@@ -65,6 +65,23 @@
             margin-bottom: 1rem;
         }
 
+        /* Mobile Hamburger Button (Hidden on Desktop) */
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 2rem;
+            cursor: pointer;
+            margin: 0 auto 1rem auto;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .hamburger-btn:hover {
+            color: #d1dfc1;
+            transform: scale(1.1);
+        }
+
         .nav-links {
             display: flex;
             justify-content: center;
@@ -249,7 +266,6 @@
             margin-bottom: 0;
         }
 
-        /* Container for stacked frame and portrait */
         .portrait-container {
             position: relative;
             width: 220px;
@@ -261,7 +277,7 @@
             display: block;
             width: 100%;
             height: auto;
-            z-index: 2; /* Sits on top */
+            z-index: 2;
             pointer-events: none;
         }
 
@@ -271,7 +287,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Sits behind the frame */
+            z-index: 1; 
             transition: opacity 1.5s ease-in-out; 
             opacity: 1; 
             object-fit: cover;
@@ -465,7 +481,6 @@
         }
 
         .eyes-base-img {
-            /* This image is totally static */
             position: absolute;
             top: 0;
             left: 0;
@@ -484,7 +499,6 @@
             animation: pulse-size 2.5s infinite ease-in-out;
         }
 
-        /* X and Y coordinates (percentages) to anchor the scaling. */
         .eye-glow-left {
             transform-origin: 38% 46%; 
         }
@@ -494,21 +508,12 @@
         }
 
         @keyframes pulse-size {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(0.3); /* Shrinks the image to 30% of its size */
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(0.3); }
+            100% { transform: scale(1); }
         }
 
-        /* -----------------------
-           ANIMATION CLASSES 
-           ----------------------- */
-           
+        /* Animation Classes */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -550,8 +555,57 @@
             transform: translateX(0);
         }
 
-        /* Responsive */
+        /* --- Responsive Modifications --- */
         @media (max-width: 768px) {
+            
+            /* 1. Mobile Hamburger Menu */
+            .hamburger-btn {
+                display: block; /* Show menu toggle */
+            }
+            .nav-links {
+                display: none; /* Hide default flex row */
+                flex-direction: column;
+                gap: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+            .nav-links.show {
+                display: flex; /* Display when toggled */
+            }
+
+            /* 2. Stacked Mobile Carousel */
+            .carousel-container {
+                height: 500px; /* Make taller to accommodate both sections */
+            }
+            .carousel-overlay {
+                position: absolute;
+                top: 250px; /* Drop the overlay beneath the top image half */
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+                background: var(--primary-green); /* Opaque solid block hiding image bottom half */
+                padding: 2rem 1.5rem;
+                justify-content: center; /* Vertically center the text inside the block */
+            }
+            .carousel-arrow {
+                top: 125px; /* Bump arrows up so they sit evenly in the image block */
+            }
+            
+            /* 3. Responsive Headings */
+            .section-title {
+                margin-bottom: 2rem; 
+                gap: 8px; /* Tighter spacing */
+            }
+            .section-title h2 {
+                font-size: 1.35rem; /* Shrink to prevent splitting across two lines */
+            }
+            .section-title img {
+                height: 1.25rem; /* Shrink graphics accordingly */
+                top: 3px; 
+            }
+
+            /* Existing adjustments */
             .society-content {
                 flex-direction: column;
                 align-items: center;
@@ -578,8 +632,14 @@
                 <img src="images/norfolk-folklore-society-logo-main.png" alt="Norfolk Folklore Society" loading="lazy">
             </a>
         </div>
+        
+        <!-- Added Hamburger Button -->
+        <button id="mobile-menu-toggle" class="hamburger-btn" aria-label="Toggle Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
         <nav>
-            <ul class="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" class="active">HOME</a></li>
                 <li><a href="stories.html">STORIES</a></li>
                 <li><a href="map.html">MAP</a></li>
@@ -689,6 +749,27 @@
 
     <!-- JavaScript for Animations, Local Archive Data, and Dynamic Carousel -->
     <script>
+        // Mobile Menu Toggle Logic
+        document.addEventListener("DOMContentLoaded", function() {
+            const menuToggle = document.getElementById('mobile-menu-toggle');
+            const navLinks = document.getElementById('nav-links');
+            
+            if(menuToggle && navLinks) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('show');
+                    // Toggle FontAwesome icon between bars and X
+                    const icon = menuToggle.querySelector('i');
+                    if (navLinks.classList.contains('show')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-xmark');
+                    } else {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+        });
+
         // Scroll Animation Logic
         const observerOptions = {
             root: null,
